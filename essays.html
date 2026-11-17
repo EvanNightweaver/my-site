@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>随笔日志 · Evan</title>
+  <style>
+    body {
+      font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+      color: #333;
+      background-color: #f7f7f8;
+      line-height: 1.8;
+      margin: 0;
+    }
+    .card {
+      max-width: 640px;
+      margin: 48px auto;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      padding: 48px 40px;
+    }
+    header { text-align: center; }
+    h1 { font-size: 22px; color: #222; margin: 8px 0 0; }
+    .tagline { color: #888; font-size: 14px; margin-top: 4px; }
+    h2 {
+      font-size: 16px;
+      color: #222;
+      border-left: 3px solid #185FA5;
+      padding-left: 10px;
+      margin: 36px 0 12px;
+    }
+    /* 文章列表：以后每写一篇，照格式往里加一条 <li> */
+    ul.links { list-style: none; padding: 0; margin: 0; }
+    ul.links li { padding: 10px 0; border-bottom: 1px dashed #e5e5e5; }
+    ul.links a { color: #185FA5; font-weight: 500; text-decoration: none; }
+    ul.links a:hover { text-decoration: underline; }
+    .desc { color: #777; font-size: 13px; margin: 2px 0 0; }
+    .empty {
+      color: #aaa;
+      font-size: 14px;
+      text-align: center;
+      padding: 32px 0;
+    }
+    footer { text-align: center; color: #aaa; font-size: 12px; margin-top: 40px; }
+    footer a { color: #185FA5; text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+
+    <header>
+      <h1>随笔日志</h1>
+      <p class="tagline">时评 · 随笔 · 练笔存稿</p>
+    </header>
+
+    <section>
+      <h2>文章</h2>
+      <!-- 还没有文章时显示下面这行占位；写了第一篇后删掉 .empty 那段，换成 <li> -->
+      <p class="empty">还在整理存稿，第一篇已经在路上。</p>
+      <ul class="links" hidden>
+        <li>
+          <a href="#">（示例）第一篇文章标题</a>
+          <p class="desc">2026-XX-XX · 一句话简介</p>
+        </li>
+      </ul>
+    </section>
+
+    <footer>
+      <p><a href="index.html">← 返回主页</a></p>
+      <p>© 2026 Evan · NightWeaver 夜语织梦</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>

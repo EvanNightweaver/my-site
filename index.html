@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+
+  <!-- viewport：让手机按真实宽度显示页面，不写的话手机上会整页缩小 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Evan · NightWeaver</title>
+
+  <style>
+    /* ========= 全局：整页的底色、字体、行距 ========= */
+    body {
+      font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+      color: #333;
+      background-color: #f7f7f8;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    /* ========= 卡片：页面正中那一块白底 ========= */
+    .card {
+      max-width: 640px;      /* 最宽 640，屏幕再宽也不拉长 */
+      margin: 48px auto;     /* 上下留 48，左右 auto = 水平居中 */
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;   /* 圆角 */
+      padding: 48px 40px;    /* 内容离边框的距离 */
+    }
+
+    /* ========= 顶部：logo + 名字 + 一句话 ========= */
+    header { text-align: center; }
+    header img { width: 200px; }
+    h1 { font-size: 22px; color: #222; margin: 8px 0 0; }
+    .tagline { color: #888; font-size: 14px; margin-top: 4px; }
+
+    /* ========= 各板块的小标题：左边一道蓝竖线 ========= */
+    h2 {
+      font-size: 16px;
+      color: #222;
+      border-left: 3px solid #185FA5;
+      padding-left: 10px;
+      margin: 36px 0 12px;
+    }
+
+    /* ========= 作品导航列表 ========= */
+    ul.links { list-style: none; padding: 0; margin: 0; }
+    ul.links li { padding: 10px 0; border-bottom: 1px dashed #e5e5e5; }
+    ul.links a { color: #185FA5; font-weight: 500; text-decoration: none; }
+    ul.links a:hover { text-decoration: underline; }
+    .desc { color: #777; font-size: 13px; margin: 2px 0 0; }
+
+    /* ========= 功能分区：三张可点击的卡片 ========= */
+    .zones {
+      display: flex;          /* 弹性布局：三张卡片横着排一行 */
+      gap: 12px;              /* 卡片之间的空隙 */
+    }
+    .zone {
+      flex: 1;                /* 三张卡片平分这一行的宽度 */
+      display: block;         /* <a> 默认是行内元素，改成块级才能撑起整张卡片 */
+      background: #fafbfc;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 14px 16px;
+      text-decoration: none;  /* 链接自带的下划线去掉 */
+      color: #333;
+      transition: all 0.15s;  /* 悬停时的变化加一点过渡，不生硬 */
+    }
+    .zone:hover {
+      border-color: #185FA5;              /* 悬停时边框变蓝 */
+      background: #f0f5fb;
+      transform: translateY(-2px);        /* 整张卡片轻轻上浮 2px */
+    }
+    .zone .z-title { font-weight: 600; color: #185FA5; }
+    .zone .z-desc { font-size: 12px; color: #888; margin: 4px 0 0; line-height: 1.5; }
+
+    /* 手机上太窄，三张卡片改成一列竖排 */
+    @media (max-width: 560px) {
+      .zones { flex-direction: column; }
+    }
+
+    /* ========= 页脚 ========= */
+    footer { text-align: center; color: #aaa; font-size: 12px; margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+  <!-- 卡片容器：整页内容都装在它里面 -->
+  <div class="card">
+
+    <!-- 顶部：logo、名字、一句话定位 -->
+    <header>
+      <img src="logo.png" alt="NightWeaver 夜语织梦">
+      <h1>Evan</h1>
+      <p class="tagline">白天和安全打交道 · 业余写科幻 · 正在从零学做网页</p>
+    </header>
+
+    <!-- 板块一：自我介绍 -->
+    <section>
+      <h2>关于我</h2>
+      <p>这里是 Evan 的个人主页，存放我练习手写 HTML 做出来的小页面和作品。东西不多，但都是亲手敲的。</p>
+    </section>
+
+    <!-- 板块二：功能分区。三张卡片各跳一个分区，每个分区是一个独立的 html -->
+    <section>
+      <h2>功能分区</h2>
+      <div class="zones">
+        <a class="zone" href="essays.html">
+          <span class="z-title">随笔日志</span>
+          <p class="z-desc">时评、随笔、练笔的存稿与发布</p>
+        </a>
+        <a class="zone" href="tools.html">
+          <span class="z-title">实用工具</span>
+          <p class="z-desc">写给自己用的小工具和速查表</p>
+        </a>
+        <a class="zone" href="practice.html">
+          <span class="z-title">个人练习区</span>
+          <p class="z-desc">学 HTML/CSS 的练手作品，不完美但真实</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- 板块三：作品导航。以后每做一个新页面，照格式往这个列表里加一条 <li> -->
+    <section>
+      <h2>作品与练习</h2>
+      <ul class="links">
+        <li>
+          <a href="github-terms.html">GitHub 高频术语表</a>
+          <p class="desc">45 个高频词的中文对照 + 记忆点，白天过一遍、晚上上 GitHub 对照实物</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 板块四：联系方式 -->
+    <section>
+      <h2>联系我</h2>
+      <p>邮箱：<a href="mailto:Nightweaver_evan@outlook.com">Nightweaver_evan@outlook.com</a></p>
+    </section>
+
+    <footer>
+      <p>© 2026 Evan · NightWeaver 夜语织梦</p>
+    </footer>
+
+  </div>
+
+</body>
+</html>
