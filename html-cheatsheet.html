@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML 标签速查表 · 中文语义版</title>
+<style>
+  :root {
+    --bg: #fbfbfa;
+    --card: #ffffff;
+    --text: #1f2328;
+    --muted: #5b6570;
+    --line: #e6e8eb;
+    --accent: #0969da;
+    --tag-bg: #eef4ff;
+    --warn-bg: #fff8e6;
+    --warn-line: #f0d9a8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 20px 64px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    line-height: 1.65;
+    font-size: 15px;
+  }
+  .wrap { max-width: 940px; margin: 0 auto; }
+  header { margin-bottom: 28px; }
+  h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.3px; }
+  .sub { color: var(--muted); font-size: 14px; margin: 0; }
+  h2 {
+    font-size: 17px;
+    margin: 34px 0 12px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--line);
+  }
+  h2 span.num {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 1px 7px;
+    margin-right: 8px;
+    vertical-align: 1px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,.04);
+    font-size: 14px;
+  }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f4f6f8; font-weight: 600; font-size: 13px; color: var(--muted); }
+  tr:last-child td { border-bottom: none; }
+  code {
+    background: var(--tag-bg);
+    color: #0a3069;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  .desc { color: var(--text); }
+  .when { color: var(--muted); font-size: 13px; }
+  .tip {
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-line);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .tip b { color: #8a5a00; }
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  .pair div {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+  }
+  .pair strong { display: block; margin-bottom: 4px; }
+  footer { margin-top: 40px; color: var(--muted); font-size: 12.5px; text-align: center; }
+  @media (max-width: 620px) { .pair { grid-template-columns: 1fr; } body { padding: 20px 12px 48px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>HTML 标签速查表</h1>
+  <p class="sub">按「这个标签是干什么的」组织，不按字母排。看懂一列「什么时候用」比背标签名有用得多。</p>
+</header>
+
+<h2><span class="num">1</span>页面骨架（每个文件都长这样）</h2>
+<table>
+  <tr><th style="width:150px">标签</th><th style="width:38%">中文含义</th><th>什么时候用 / 记忆点</th></tr>
+  <tr><td><code>&lt;!DOCTYPE html&gt;</code></td><td class="desc">文档类型声明</td><td class="when">第一行必须有，告诉浏览器"这是现代 HTML5"。不是标签，不用闭合。</td></tr>
+  <tr><td><code>&lt;html&gt;</code></td><td class="desc">整个网页</td><td class="when">最外层容器，里面只放 head 和 body 两个儿子。</td></tr>
+  <tr><td><code>&lt;head&gt;</code></td><td class="desc">页面设置区（给人看不见）</td><td class="when">放标题、编码、CSS 引用。这里的字不会显示在网页上。</td></tr>
+  <tr><td><code>&lt;body&gt;</code></td><td class="desc">页面内容区（给人看）</td><td class="when">所有你能在浏览器里看到的东西都放这里。</td></tr>
+  <tr><td><code>&lt;meta charset="UTF-8"&gt;</code></td><td class="desc">字符编码声明</td><td class="when">不写这句，中文会变乱码。放在 head 第一行。</td></tr>
+  <tr><td><code>&lt;meta name="viewport" ...&gt;</code></td><td class="desc">手机屏幕适配声明</td><td class="when">不写这句，手机打开会缩小成一小块。现在建站必写。</td></tr>
+  <tr><td><code>&lt;title&gt;</code></td><td class="desc">浏览器标签页上的标题</td><td class="when">不是页面里的大标题！它是标签页和搜索结果里显示的名字。</td></tr>
+</table>
+
+<h2><span class="num">2</span>标题与段落（内容的骨架）</h2>
+<table>
+  <tr><th style="width:150px">标签</th><th style="width:38%">中文含义</th><th>什么时候用 / 记忆点</th></tr>
+  <tr><td><code>&lt;h1&gt;…&lt;h6&gt;</code></td><td class="desc">一级到六级标题</td><td class="when">h1 是页面主题，一篇只用一个；h2 是大章节，h3 是小节。按层级用，别为了字大跳级。</td></tr>
+  <tr><td><code>&lt;p&gt;</code></td><td class="desc">段落</td><td class="when">一段话用一个 p。p 不能套 p。</td></tr>
+  <tr><td><code>&lt;br&gt;</code></td><td class="desc">强制换行</td><td class="when">同一段里硬换行（地址、诗句）。不要用它代替段落间距。</td></tr>
+  <tr><td><code>&lt;hr&gt;</code></td><td class="desc">分隔线</td><td class="when">话题切换时画一条横线。空标签，不用闭合。</td></tr>
+  <tr><td><code>&lt;strong&gt;</code></td><td class="desc">重要（语义上强调）</td><td class="when">比 <code>&lt;b&gt;</code> 更好：它告诉搜索引擎"这很重要"，不只是变粗。</td></tr>
+  <tr><td><code>&lt;em&gt;</code></td><td class="desc">强调（语气加重）</td><td class="when">比 <code>&lt;i&gt;</code> 更好，表示"读的时候要重读"，默认显示斜体。</td></tr>
+  <tr><td><code>&lt;blockquote&gt;</code></td><td class="desc">引用一段话</td><td class="when">引用别人原文，默认会缩进。里面还要再套 p。</td></tr>
+</table>
+
+<h2><span class="num">3</span>列表（三种，别混用）</h2>
+<table>
+  <tr><th style="width:150px">标签</th><th style="width:38%">中文含义</th><th>什么时候用 / 记忆点</th></tr>
+  <tr><td><code>&lt;ul&gt;</code> + <code>&lt;li&gt;</code></td><td class="desc">无序列表（圆点）</td><td class="when">顺序不重要时：菜单、特点清单、友情链接。</td></tr>
+  <tr><td><code>&lt;ol&gt;</code> + <code>&lt;li&gt;</code></td><td class="desc">有序列表（1234）</td><td class="when">顺序有意义时：操作步骤、排行榜。ol 是 ordered 的首字母。</td></tr>
+  <tr><td><code>&lt;dl&gt;</code> / <code>&lt;dt&gt;</code> / <code>&lt;dd&gt;</code></td><td class="desc">名词解释列表</td><td class="when">术语表、问答。dt 是词，dd 是解释，正好适合你那张 GitHub 术语表。</td></tr>
+</table>
+
+<h2><span class="num">4</span>链接与图片</h2>
+<table>
+  <tr><th style="width:180px">标签 / 属性</th><th style="width:34%">中文含义</th><th>什么时候用 / 记忆点</th></tr>
+  <tr><td><code>&lt;a href="…"&gt;</code></td><td class="desc">超链接（a = anchor 锚）</td><td class="when">跳到别的页面。站内用相对路径 <code>about.html</code>，站外用 <code>https://…</code>。</td></tr>
+  <tr><td><code>target="_blank"</code></td><td class="desc">在新标签页打开</td><td class="when">外链建议加，别把访客从你的站带走。</td></tr>
+  <tr><td><code>&lt;img src="…" alt="…"&gt;</code></td><td class="desc">插入图片</td><td class="when"><b>alt 必须写</b>：图片加载失败时显示这段文字，也是给视障用户读屏用的。</td></tr>
+  <tr><td><code>width / height</code></td><td class="desc">宽高（像素）</td><td class="when">写上能防止图片加载时页面跳动。</td></tr>
+</table>
+
+<div class="tip">
+  <b>路径三句话记住：</b><code>logo.png</code> = 同一文件夹里的文件；<code>images/logo.png</code> = 子文件夹里；<code>../logo.png</code> = 上一级文件夹里（两个点 = 往上走一层）。
+</div>
+
+<h2><span class="num">5</span>语义标签（HTML5 重点，也是"含义"的真正来源）</h2>
+<p class="sub" style="margin:0 0 10px">这些标签外观跟 <code>&lt;div&gt;</code> 几乎一样，但名字本身表达了"这块内容是什么"。搜索引擎和读屏软件靠它们理解你的页面。</p>
+<table>
+  <tr><th style="width:150px">标签</th><th style="width:38%">中文含义</th><th>什么时候用 / 记忆点</th></tr>
+  <tr><td><code>&lt;header&gt;</code></td><td class="desc">页头 / 区块头部</td><td class="when">放 logo、站名、导航。可以有好几个（每个 section 都能有）。</td></tr>
+  <tr><td><code>&lt;nav&gt;</code></td><td class="desc">导航区</td><td class="when">主要链接集合。不是所有链接都算导航，页脚的零散链接不算。</td></tr>
+  <tr><td><code>&lt;main&gt;</code></td><td class="desc">主要内容区</td><td class="when">一页只能用一次，装这页真正的内容。CSS 里常配合居中和宽度。</td></tr>
+  <tr><td><code>&lt;article&gt;</code></td><td class="desc">独立成篇的内容</td><td class="when">一篇文章、一条博客、一个卡片。判断标准：单独拿出去也讲得通。</td></tr>
+  <tr><td><code>&lt;section&gt;</code></td><td class="desc">有主题的区块</td><td class="when">通常带一个小标题。没标题的纯布局就别用它，用 div。</td></tr>
+  <tr><td><code>&lt;aside&gt;</code></td><td class="desc">侧边 / 补充内容</td><td class="when">相关推荐、作者简介、广告位。删掉它不影响主内容。</td></tr>
+  <tr><td><code>&lt;footer&gt;</code></td><td class="desc">页脚</td><td class="when">版权、联系方式、备案号。</td></tr>
+  <tr><td><code>&lt;div&gt;</code></td><td class="desc">通用容器（无语义）</td><td class="when">纯粹为了布局分组，没有更合适的语义标签时才用。<b>它是最后的选择，不是第一选择。</b></td></tr>
+</table>
+
+<h2><span class="num">6</span>表格（数据才用，别拿来排版）</h2>
+<table>
+  <tr><th style="width:150px">标签</th><th style="width:38%">中文含义</th><th>什么时候用 / 记忆点</th></tr>
+  <tr><td><code>&lt;table&gt;</code></td><td class="desc">表格</td><td class="when">展示"行列对应"的数据。拿来摆版面是二十年前的做法。</td></tr>
+  <tr><td><code>&lt;tr&gt;</code></td><td class="desc">表格的一行（row）</td><td class="when">先写 tr，再往里面塞格子。</td></tr>
+  <tr><td><code>&lt;th&gt;</code></td><td class="desc">表头单元格</td><td class="when">默认加粗居中，语义上表示"这一列是什么"。</td></tr>
+  <tr><td><code>&lt;td&gt;</code></td><td class="desc">普通数据单元格</td><td class="when">td = table data。</td></tr>
+  <tr><td><code>colspan / rowspan</code></td><td class="desc">跨列 / 跨行合并</td><td class="when">合并单元格用，写数字表示跨几格。</td></tr>
+</table>
+
+<h2><span class="num">7</span>表单（要收集用户输入时才用）</h2>
+<table>
+  <tr><th style="width:170px">标签</th><th style="width:36%">中文含义</th><th>什么时候用 / 记忆点</th></tr>
+  <tr><td><code>&lt;form&gt;</code></td><td class="desc">表单容器</td><td class="when">包住一组输入。静态站没有后台，提交需要外部服务配合。</td></tr>
+  <tr><td><code>&lt;input&gt;</code></td><td class="desc">输入框（万能选手）</td><td class="when"><code>type</code> 决定长相：text 文本、email 邮箱、password 密码、checkbox 勾选、radio 单选、file 选文件。</td></tr>
+  <tr><td><code>&lt;label&gt;</code></td><td class="desc">输入框的说明文字</td><td class="when">点了文字就能聚焦输入框，手机上也更好点。别忘了写。</td></tr>
+  <tr><td><code>&lt;textarea&gt;</code></td><td class="desc">多行文本框</td><td class="when">留言、评论。跟 input 不同，它有闭合标签。</td></tr>
+  <tr><td><code>&lt;button&gt;</code></td><td class="desc">按钮</td><td class="when">比 <code>&lt;input type="submit"&gt;</code> 更灵活，里面能放图标和文字。</td></tr>
+  <tr><td><code>&lt;select&gt;</code> + <code>&lt;option&gt;</code></td><td class="desc">下拉选择框</td><td class="when">选项固定且不多时。</td></tr>
+</table>
+
+<h2><span class="num">8</span>最容易搞混的几对</h2>
+<div class="pair">
+  <div><strong><code>&lt;b&gt;</code> vs <code>&lt;strong&gt;</code></strong>外观一样。b 只是变粗（样式），strong 表示"重要"（语义）。优先 strong。</div>
+  <div><strong><code>&lt;i&gt;</code> vs <code>&lt;em&gt;</code></strong>外观一样。i 只是斜体，em 表示"语气强调"。优先 em。</div>
+  <div><strong><code>&lt;div&gt;</code> vs <code>&lt;section&gt;</code></strong>div 是纯容器；section 表示"这一块有主题"。有标题用 section，纯布局用 div。</div>
+  <div><strong><code>&lt;head&gt;</code> vs <code>&lt;header&gt;</code></strong>head 是页面设置区（看不见），header 是页头（看得见）。差一个字母，天差地别。</div>
+  <div><strong><code>class</code> vs <code>id</code></strong>class 可以重复用（多个元素共用一套样式）；id 全页唯一（当锚点、被 JS 找）。</div>
+  <div><strong>相对路径 vs 绝对路径</strong><code>a.html</code> 跟着文件夹走；<code>/a.html</code> 从网站根目录算；<code>https://…</code> 完整地址。</div>
+</div>
+
+<h2><span class="num">9</span>空标签（不用闭合的五个）</h2>
+<table>
+  <tr><th style="width:200px">标签</th><th>作用</th></tr>
+  <tr><td><code>&lt;br&gt;</code></td><td>换行</td></tr>
+  <tr><td><code>&lt;hr&gt;</code></td><td>分隔线</td></tr>
+  <tr><td><code>&lt;img&gt;</code></td><td>图片</td></tr>
+  <tr><td><code>&lt;input&gt;</code></td><td>输入框</td></tr>
+  <tr><td><code>&lt;meta&gt;</code> / <code>&lt;link&gt;</code></td><td>页面设置 / 引入外部文件（如 CSS）</td></tr>
+</table>
+
+<div class="tip">
+  <b>在 VS Code 里怎么查语义：</b>把光标放在任意标签上按 <code>F1</code> 搜 "hover"，或者直接把鼠标停上去——会弹出英文官方说明。看不懂英文时，回这张表查，两边对照着记，一个月就熟了。
+</div>
+
+<footer>
+  自己维护的速查表 · 遇到表里没有的标签就补一行，这张表会越长越像你自己的知识库
+</footer>
+
+</div>
+</body>
+</html>
