@@ -1,0 +1,2298 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>中高端主流显卡性能及价格对比</title>
+  <meta name="description" content="2026 年 11 月九款主流显卡（RTX 4080 / 5070 Ti / RX 9070 XT 等）横评：3DMark 跑分、各分辨率游戏帧率、光追与路径追踪实测，以及京东 / 淘宝 / 拼多多当日价格快照与选购建议。" />
+  <style>
+    /* ===================================================================
+         CSS 分六层，从上到下读：
+         ① 全局基础 → ② 通用工具类 → ③ 布局容器 → ④ 正文排版 → ⑤ lead 横幅 → ⑤b 交互组件 → ⑥ 响应式
+         加新样式先问自己"这是哪一层"，插到对应段落里就行。
+         =================================================================== */
+
+    /* ================= ① 全局基础（变量 + reset + 标签默认） ================= */
+    /* 变量 = 给数值起个名字。改这里的数，全页跟着变，不用满文件找。 */
+    :root {
+      /* ---- 尺寸 ---- */
+      --page-width: 1200px;
+      /* 整页版心。将来左边放目录，整个版心用这个宽度 */
+      --content-width: 900px;
+      /* 正文列宽。决定一行放多少字，想更宽/更窄改这里 */
+      --sidebar-width: 260px;
+      /* 预留：左侧目录宽度（现在没用上） */
+      --gap: 30px;
+      /* 卡片之间的间距，也是将来目录和正文的距离 */
+      --fs-base: 16px;
+      /* 正文字号。觉得小就改成 17px 试试 */
+
+      /* ---- 配色（暗金系） ---- */
+      --accent: #e29f0e;
+      /* 主色：标题竖条、高亮、表头下边框 */
+      --accent-deep: #c88f0c;
+      /* 深一点：按钮、链接 */
+      --accent-dark: #a8750a;
+      /* 最深：鼠标悬浮时 */
+      --accent-tint: #fdf8ec;
+      /* 极浅底色：提示框、表格行高亮 */
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      /* 宽度包含边框和内边距，算尺寸不踩坑 */
+    }
+
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+      background-color: #f4f7f6;
+      color: #333;
+      font-size: var(--fs-base);
+      /* 正文字号统一在 ① 的变量里改 */
+      line-height: 1.8;
+      margin: 0;
+      padding: 30px 20px 60px;
+      /* 上 左右 下；用 padding 比 margin 稳 */
+    }
+
+    h1 {
+      font-family: SimHei, "Microsoft YaHei", sans-serif;
+      font-size: 50px;
+      line-height: 1.3;
+      color: #333;
+      text-align: center;
+    }
+
+    h2 {
+      font-family: SimHei, "Microsoft YaHei", sans-serif;
+      font-size: 24px;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    h3 {
+      font-family: SimHei, "Microsoft YaHei", sans-serif;
+      font-size: 19px;
+      line-height: 1.5;
+      color: #444;
+    }
+
+    p {
+      margin: 0 0 1em;
+      /* 段间距统一交给这里，别再逐段写 */
+    }
+
+    li {
+      /* 无序 / 有序列表项 */
+      list-style-position: inside;
+      /* 圆点或序号往内缩 */
+      margin: 10px 0;
+      /* 字号不写，自动跟正文走 */
+    }
+
+    a {
+      color: var(--accent-deep);
+    }
+
+    img {
+      max-width: 100%;
+      /* 任何图都不会撑破容器 */
+      height: auto;
+    }
+
+    /* ================= ② 通用工具类（不带 .my-card 前缀，哪都能用） ================= */
+    .meta-info {
+      /* 元信息行：日期 / 作者 / 标签 */
+      text-align: center;
+      color: #666;
+      font-size: 18px;
+      margin: 8px 0 0;
+    }
+
+    .divider {
+      /* 分隔线 */
+      border: 0;
+      border-top: 1px solid #e6e6e6;
+      margin: 20px auto 30px;
+    }
+
+    .highlight {
+      /* 暗金高亮：可挂文字，也可挂 ul */
+      color: var(--accent);
+    }
+
+    .note {
+      /* 提示框：用来放"停产不参与对比"这类注记 */
+      background-color: var(--accent-tint);
+      border-left: 4px solid var(--accent);
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin: 20px 0;
+      font-size: 15px;
+      color: #6b5b3e;
+    }
+
+    .table-scroll {
+      /* 表格横向滚动外壳：手机上必用 */
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    .table-scroll table {
+      margin: 0;
+      min-width: 560px;
+      /* 小于这个宽度就横向滑动，不挤压列 */
+    }
+
+    /* ================= ③ 布局容器（只管宽度和居中） =================
+         正文列 900px 居中；左侧目录是 position:fixed 悬浮卡，
+         不占文档流，窄屏（<1500px）直接隐藏，正文布局完全不用动。 */
+    .page-head {
+      /* 页头：标题 + 元信息 + 分隔线 */
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    .page-head h1 {
+      margin: 0;
+    }
+
+    .container {
+      /* 正文列：宽度由变量控制 */
+      width: 100%;
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    .my-card {
+      /* 正文卡片 */
+      width: 100%;
+      /* 宽度交给 .container，卡片只负责长相 */
+      background-color: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      margin-bottom: var(--gap);
+      /* 卡片之间留空隙 */
+    }
+
+    /* ================= ④ 正文排版（全部以 .my-card 开头，只卡片内部生效） ================= */
+    /* ---- 标题 ---- */
+    .my-card h2 {
+      margin: 0 0 20px;
+      padding-left: 12px;
+      border-left: 4px solid var(--accent);
+      /* 标题左侧暗金竖条，不喜欢删这两行 */
+    }
+
+    .my-card h3 {
+      /* 卡片里的三级小标题 */
+      margin: 26px 0 12px;
+    }
+
+    /* ---- 段落 ---- */
+    .my-card p {
+      text-align: left;
+      text-indent: 2em;
+      /* 首行缩进两个字 */
+      line-height: 1.8;
+      color: #333;
+      margin: 0 0 1em;
+    }
+
+    .my-card>*:last-child {
+      /* 卡片里最后一个元素不留底部空白 */
+      margin-bottom: 0;
+    }
+
+    /* ---- 列表 ---- */
+    .my-card ul,
+    .my-card ol {
+      margin: 0 0 1.2em;
+    }
+
+    .my-card li {
+      line-height: 1.8;
+      /* 字号跟正文继承，不再单独写死 */
+    }
+
+    /* ---- 行内元素 ---- */
+    .my-card a {
+      /* 正文里的链接：暗金 + 细下划线 */
+      color: var(--accent-deep);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(200, 143, 12, 0.35);
+      transition: color 0.25s, border-color 0.25s;
+    }
+
+    .my-card a:hover {
+      color: var(--accent-dark);
+      border-bottom-color: var(--accent-dark);
+    }
+
+    /* ---- 引用块 ---- */
+    .my-card blockquote {
+      margin: 20px 0;
+      padding: 4px 0 4px 16px;
+      border-left: 3px solid #e0e0e0;
+      color: #666;
+    }
+
+    .my-card blockquote p {
+      text-indent: 0;
+      /* 引用块里不缩进 */
+    }
+
+    /* ---- 卡片内分隔线 ---- */
+    .my-card hr {
+      border: 0;
+      border-top: 1px dashed #e6e6e6;
+      margin: 26px 0;
+    }
+
+    /* ---- 表格（参数对比用） ---- */
+    .my-card table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .my-card th,
+    .my-card td {
+      padding: 10px 12px;
+      border: 1px solid #e8e8e8;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .my-card thead th {
+      /* 表头：浅灰底 + 暗金下边框 */
+      background-color: #f8f9fa;
+      font-weight: 700;
+      color: #333;
+      border-bottom: 2px solid var(--accent);
+      white-space: nowrap;
+      /* 表头不换行 */
+    }
+
+    .my-card tbody tr:nth-child(even) {
+      background-color: #fafafa;
+      /* 斑马纹，长表不串行 */
+    }
+
+    .my-card tbody tr:hover {
+      background-color: var(--accent-tint);
+      /* 鼠标扫过整行高亮 */
+    }
+
+    .my-card td.num {
+      /* 数字列：等宽数字，纵向对齐 */
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ---- 插图 ---- */
+    .my-figure {
+      /* 图 + 图名 的整块容器 */
+      margin: 24px 0;
+      text-align: center;
+    }
+
+    .my-figure img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      /* 不再用 height:100% + cover，避免裁掉整张图 */
+      margin: 0 auto;
+    }
+
+    .my-figure figcaption {
+      /* 图名 */
+      margin-top: 8px;
+      font-family: "Microsoft YaHei", Arial, sans-serif;
+      font-size: 14px;
+      font-style: italic;
+      color: #666;
+    }
+
+    /* ================= ⑤ 组件：lead 横幅（及内部子元素） ================= */
+    .lead-banner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      background-color: #f8f9fa;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      max-width: var(--content-width);
+      /* 和正文列同宽 */
+      margin: 0 auto var(--gap);
+    }
+
+    .banner-logo img {
+      /* 左侧 Logo */
+      height: 50px;
+      width: auto;
+      display: block;
+    }
+
+    .banner-title {
+      /* 中间标题 */
+      flex: 1;
+      /* 占满剩余空间 */
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .banner-title a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.3s;
+    }
+
+    .banner-title a:hover {
+      color: var(--accent-deep);
+      /* 悬浮变暗金 */
+    }
+
+    .banner-action .btn {
+      /* 右侧按钮 */
+      display: inline-block;
+      padding: 8px 20px;
+      background-color: var(--accent-deep);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background-color 0.3s;
+    }
+
+    .banner-action .btn:hover {
+      background-color: var(--accent-dark);
+    }
+
+    /* ================= ⑤b 交互组件（总结卡 / 文末按钮 / 回顶部 / 签名） ================= */
+    html {
+      scroll-behavior: smooth;
+      /* 锚点跳转带平滑滚动，「感兴趣」按钮靠它 */
+    }
+
+    .btn:focus-visible,
+    .act-btn:focus-visible,
+    #back-top:focus-visible {
+      /* 键盘焦点圈：换成暗金细边，替代浏览器默认黑框 */
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* ---- 全文总结卡：深底金字，和正文白卡区分开 ---- */
+    .summary-card {
+      background: linear-gradient(145deg, #2a2314 0%, #1c170d 100%);
+      border: 1px solid rgba(226, 159, 14, 0.35);
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      margin-bottom: var(--gap);
+      color: #cfc3a8;
+    }
+
+    .summary-card .sum-tag {
+      /* 顶部小字标签 */
+      text-indent: 0;
+      margin: 0 0 6px;
+      font-size: 13px;
+      letter-spacing: 0.35em;
+      color: rgba(226, 159, 14, 0.75);
+    }
+
+    .summary-card h2 {
+      margin: 0 0 18px;
+      padding-left: 12px;
+      border-left: 4px solid var(--accent);
+      color: #f2e7cd;
+    }
+
+    .summary-card h2 .sum-word {
+      /* 「总结」两个字：金色强调 */
+      color: var(--accent);
+    }
+
+    .summary-card p {
+      text-indent: 0;
+      color: #cfc3a8;
+    }
+
+    .summary-card li {
+      color: #cfc3a8;
+      line-height: 1.9;
+    }
+
+    .summary-card li b {
+      color: var(--accent);
+    }
+
+    /* ---- 文末互动按钮：喜欢 / 收藏 / 分享 ---- */
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .act-btn {
+      cursor: pointer;
+      padding: 8px 20px;
+      border: 1px solid rgba(226, 159, 14, 0.55);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--accent);
+      font-size: 15px;
+      font-family: inherit;
+      line-height: 1.6;
+      transition: background-color 0.25s, color 0.25s, border-color 0.25s;
+    }
+
+    .act-btn:hover {
+      background: rgba(226, 159, 14, 0.15);
+      border-color: var(--accent);
+    }
+
+    .act-btn .heart {
+      /* 小红心：点亮时放大变红 */
+      display: inline-block;
+      transition: transform 0.25s, color 0.25s;
+    }
+
+    .act-btn.liked .heart {
+      color: #e0245e;
+      transform: scale(1.3);
+    }
+
+    .act-btn.liked {
+      border-color: rgba(224, 36, 94, 0.6);
+      color: #e0245e;
+    }
+
+    .act-btn.saved {
+      /* 收藏后的状态：实心星 + 变色 */
+      color: var(--accent-deep);
+      border-color: var(--accent-deep);
+    }
+
+    /* ---- 回到顶部：右侧悬浮钮，箭头 + TOP 竖排 ---- */
+    #back-top {
+      position: fixed;
+      right: 26px;
+      bottom: 40px;
+      z-index: 99;
+      width: 54px;
+      height: 58px;
+      border-radius: 10px;
+      border: 1px solid var(--accent-deep);
+      background: #fff;
+      color: var(--accent-deep);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1px;
+      padding: 0;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, background-color 0.25s, color 0.25s;
+    }
+
+    #back-top .top-arrow {
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    #back-top .top-word {
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    #back-top.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #back-top:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* ---- 页面签名 ---- */
+    .site-footer {
+      max-width: var(--content-width);
+      margin: 46px auto 0;
+      text-align: center;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .site-footer img {
+      width: 200px;
+      display: block;
+      margin: 0 auto 12px;
+    }
+
+    .site-footer a {
+      color: var(--accent-deep);
+    }
+
+    /* ---- 文章目录：窄屏/手机 = 折叠卡片；宽屏（≥1500px）= 左侧悬浮 ---- */
+    .toc {
+      max-width: var(--content-width);
+      margin: 0 auto var(--gap);
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 4px 18px;
+    }
+
+    .toc summary.toc-title {
+      /* 折叠条：窄屏点击它展开 / 收起 */
+      cursor: pointer;
+      padding: 10px 0;
+      font-size: 14px;
+      font-weight: bold;
+      list-style: none;
+      /* 去掉 details 自带的三角标 */
+    }
+
+    .toc summary.toc-title::-webkit-details-marker {
+      display: none;
+    }
+
+    .toc .toc-hint {
+      /* 「（点击展开 / 收起）」小字提示，宽屏下随折叠条一起隐藏 */
+      font-size: 12px;
+      font-weight: normal;
+      color: #999;
+    }
+
+    .toc ul {
+      list-style: none;
+      margin: 0 0 10px;
+      padding: 0;
+    }
+
+    .toc a {
+      display: block;
+      padding: 6px 10px;
+      border-left: 2px solid transparent;
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1.6;
+      /* 字色不设，跟随页面默认黑色 */
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .toc a:hover {
+      border-left-color: var(--accent);
+    }
+
+    .toc li.toc-sub a {
+      /* 子级：只靠缩进和小一号区分层级，不用灰色 */
+      padding-left: 26px;
+      font-size: 13px;
+    }
+
+    .toc a.active {
+      /* 滚动高亮：当前读到的章节 */
+      border-left-color: var(--accent);
+      background: rgba(226, 159, 14, 0.08);
+      font-weight: bold;
+    }
+
+    @media (min-width: 1500px) {
+      .toc {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        /* 左边缘 = 左边距正中：左边距 300px - 目录 260px - 留 20px 缝 */
+        left: calc((100vw - var(--content-width)) / 2 - var(--sidebar-width) - 20px);
+        width: var(--sidebar-width);
+        max-height: 80vh;
+        overflow-y: auto;
+        margin: 0;
+        padding: 14px 16px;
+      }
+
+      .toc summary.toc-title {
+        /* 宽屏目录常开，折叠条和小字提示一起隐藏 */
+        display: none;
+      }
+
+      .toc ul {
+        margin-bottom: 0;
+      }
+    }
+
+    /* 锚点跳转后，标题离视口顶部留点呼吸空间 */
+    .my-card h2[id],
+    .my-card h3[id],
+    .summary-card[id] {
+      scroll-margin-top: 24px;
+    }
+
+    /* ================= ⑥ 响应式（永远放最后） ================= */
+    @media (max-width: 768px) {
+      body {
+        padding: 18px 12px 40px;
+      }
+
+      h1 {
+        font-size: 30px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .meta-info {
+        font-size: 14px;
+      }
+
+      .my-card {
+        padding: 20px 16px;
+        border-radius: 10px;
+      }
+
+      .my-card h2 {
+        font-size: 20px;
+        padding-left: 10px;
+      }
+
+      .my-card th,
+      .my-card td {
+        padding: 6px 8px;
+        font-size: 13px;
+      }
+
+      .lead-banner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .banner-action {
+        align-self: flex-end;
+        /* 按钮靠右 */
+      }
+
+      #back-top {
+        right: 12px;
+        bottom: 20px;
+        width: 48px;
+        height: 52px;
+      }
+
+      #back-top .top-arrow {
+        font-size: 20px;
+      }
+
+      #back-top .top-word {
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 文章目录：宽屏（≥1500px）悬浮在左侧空白边距；窄屏/手机折叠成一条，
+       点击展开、跳转后自动收起。页面加载后 JS 把它挪到甄选横幅下方，宽窄屏共用同一份 HTML。 -->
+  <nav class="toc" id="toc" aria-label="文章目录">
+    <details id="toc-box" open>
+      <summary class="toc-title">目 录 <span class="toc-hint">（点击展开 / 收起）</span></summary>
+      <ul>
+      <li><a href="#sec-bg">一、背景：2026 年底的市场行情</a></li>
+      <li><a href="#sec-overview">二、9 张卡全景表</a></li>
+      <li><a href="#sec-performance">三、详细性能对比</a></li>
+      <li class="toc-sub"><a href="#tier-1">层级一：4080 / 5070 Ti / 9070 XT</a></li>
+      <li class="toc-sub"><a href="#tier-2">层级二：9070 / 5070 / 9070 GRE</a></li>
+      <li class="toc-sub"><a href="#tier-3">层级三：4070 Ti / 5060 Ti / 9060 XT</a></li>
+      <li><a href="#sec-price">四、价格对比</a></li>
+      <li class="toc-sub"><a href="#price-1">1. 现价离首发价有多远</a></li>
+      <li class="toc-sub"><a href="#price-2">2. 京东 / 淘宝 / 拼多多差价</a></li>
+      <li class="toc-sub"><a href="#price-3">3. 同芯不同品牌差价</a></li>
+      <li class="toc-sub"><a href="#price-4">4. 这价钱到底买不买</a></li>
+      <li><a href="#conclusion">全文总结</a></li>
+    </ul>
+    </details>
+  </nav>
+
+  <header class="page-head">
+    <h1>中高端主流显卡性能及价格对比</h1>
+    <div class="meta-info">
+      <span>📅 2026-11-24 </span> | <span> ✍️ 作者: NightWeaver</span> |
+      <span>🏷️ 硬件评测 </span>
+    </div>
+    <hr class="divider" />
+  </header>
+
+  <div class="lead-banner">
+    <div class="banner-logo">
+      <img src="image/mylogo.png" alt="NightWeaver 甄选" />
+    </div>
+
+    <div class="banner-title">
+      <a href="#" title="文章标题">本文结合2026年底的市场行情，深度对比了N卡与A卡的性价比，帮你避开溢价坑。</a>
+    </div>
+
+    <div class="banner-action">
+      <a href="#conclusion" class="btn">感兴趣 ↓</a>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="my-card">
+      <h2 id="sec-bg">一、背景：2026 年底的市场行情</h2>
+      <p>
+        目前，市面上主流的显卡，基本就是 N 卡 RTX 50 系和 A 卡 RX 9000 系。一直到 2026 年下半年，显卡整体还在上涨。
+      </p>
+      <p>
+        说实在的，年末就不是个入手显卡的好时候。早在 2026 上半年 DRAM/GDDR 就暴涨，显卡现价全面甩开史低。11
+        月英伟达内部还折腾了一回：掌舵 30 多年的黄仁勋 11 月 12 日辞去总裁、CEO 和董事职务，CFO 克雷斯临时顶上；结果 11 月 23
+        日董事会又一致通过，让他官复原职。风波是过去了，可英伟达的战略重心也摆到台面上了：扩大 AI、工业、企业、科研这些专业显卡的占比。游戏卡极大可能进一步减产，或者说已经是板上钉钉的事情。往后两年，NVIDIA        桌面游戏卡只会更少、更贵。
+      </p>
+      <p>至于理由，我觉得有三点：</p>
+      <p>
+        第一点，就是 30 年来的头一次“断更”：受全球显存短缺影响，英伟达为了保住利润率高达 65% 的数据中心业务，主动砍掉了 30%-40%
+        的游戏卡产能。2026 一整年没发任何新一代 GeForce，连 RTX 50 Super 都无限期推迟了。
+      </p>
+      <p>
+        第二，产能倾斜：台积电的先进制程晶圆和 HBM3E 显存产能，优先喂给了 AI 芯片，轮到游戏卡要用的 GDDR7 显存时已经严重不够。
+      </p>
+      <p>
+        第三，利润驱动：英伟达财报里，游戏业务营收占比已经掉到 8% 左右，数据中心则冲到 88%。对英伟达来说，一片游戏卡晶圆能赚大概
+        10 万美元，换成 AI 芯片晶圆就是 80-120 万美元。
+      </p>
+      <p>
+        那 AMD 呢？这会儿 AMD 的市场份额还只是捡英伟达剩下的，尤其在光追这块还差着一大口气。2026 年 9 月，<b>DLSS 5</b> 发布，对 AMD 的 <b>FSR</b> 算是一次降维打击，但也倒逼 AMD
+        转了方向。DLSS 5 早就不只是“超分辨率”了，已经跨进了神经渲染领域；而 AMD 的 FSR 4.1 / Redstone
+        进步虽然大，本质还是在“超分与帧生成”这条赛道上追。不过英伟达这一转向，2026
+        往后反而是 AMD 近些年最好的破局机会。
+      </p>
+      <p>
+        背景差不多就这样。最近也是逛了不少论坛、比过商城主流的卡，心血来潮写这篇对比。
+      </p>
+      <p>今天挑了几款卡对比，分三个层级。</p>
+      <ul class="highlight">
+        <li>层级一：<b>RTX 4080 / RTX 5070 Ti / RX 9070 XT</b></li>
+        <li>层级二：<b>RX 9070 / RTX 5070 / RX 9070 GRE</b></li>
+        <li>层级三：<b>RTX 4070 Ti / RTX 5060 Ti 8G / RX 9060 XT</b></li>
+      </ul>
+      <p>
+        我会从用途、核心、显存、功耗/兼容、实测（实测来自各博主的资料，会注明出处和链接）、价格（截止到 2026 年 11
+        月）这几个维度来比。其中 RTX 4080、RTX 4070 Ti 已经停产，不参与价格对比。
+      </p>
+    </div>
+
+    <div class="my-card">
+      <h2 id="sec-overview">二、9 张卡全景表</h2>
+      <p>下面是我整理的 9 张显卡跑分全景表。先说清一个最容易搞混的地方：<b>Time Spy 的固定分辨率是 2K（2560×1440）</b>，官方的 4K 版本叫 <b>Time Spy Extreme</b>，两套分数差近一倍，混着比就是拿苹果比橘子。所以我把两套并列，下文所有分析一律以 2K 那列为准。</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>显卡</th>
+              <th>显存</th>
+              <th>Time Spy（2K）图形分</th>
+              <th>Time Spy Extreme（4K）图形分</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RX 9070 XT</td>
+              <td>16GB GDDR6</td>
+              <td class="num">约 30,700</td>
+              <td class="num">约 14,600</td>
+            </tr>
+            <tr>
+              <td>RTX 4080</td>
+              <td>16GB GDDR6X</td>
+              <td class="num">约 28,200</td>
+              <td class="num">约 14,000</td>
+            </tr>
+            <tr>
+              <td>RTX 5070 Ti</td>
+              <td>16GB GDDR7</td>
+              <td class="num">约 27,900</td>
+              <td class="num">约 13,500</td>
+            </tr>
+            <tr>
+              <td>RX 9070</td>
+              <td>16GB GDDR6</td>
+              <td class="num">约 26,800</td>
+              <td class="num">约 12,650</td>
+            </tr>
+            <tr>
+              <td>RTX 4070 Ti</td>
+              <td>12GB GDDR6X</td>
+              <td class="num">约 23,200</td>
+              <td class="num">约 11,000</td>
+            </tr>
+            <tr>
+              <td>RTX 5070</td>
+              <td>12GB GDDR7</td>
+              <td class="num">约 22,400</td>
+              <td class="num">约 10,700</td>
+            </tr>
+            <tr>
+              <td>RX 9070 GRE</td>
+              <td>12GB GDDR6</td>
+              <td class="num">约 22,000</td>
+              <td class="num">约 10,400</td>
+            </tr>
+            <tr>
+              <td>RX 9060 XT（16GB）</td>
+              <td>16GB GDDR6</td>
+              <td class="num">约 16,500</td>
+              <td class="num">约 7,600</td>
+            </tr>
+            <tr>
+              <td>RTX 5060 Ti 8G</td>
+              <td>8GB GDDR7</td>
+              <td class="num">约 16,000</td>
+              <td class="num">约 7,300</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">表中为公开统计的均值，各站之间差异一般在 ±3% 以内，同一列内可以放心横向比较；部分空数据表示该卡暂无可靠收录。</p>
+      <figure class="my-figure">
+        <img src="image/gpu-tierspy-ladder.svg" alt="9 张显卡 3DMark Time Spy 跑分天梯图" />
+        <figcaption>9 张显卡 3DMark Time Spy 图形分天梯（N 卡绿 / A 卡红，右端灰字为 4K 成绩）</figcaption>
+      </figure>
+      <p>
+        整体看下来，2026 年的中高端市场，N 卡和 A 卡贴得很紧：论出货份额，NVIDIA 一家独大。据 Jon Peddie Research提供的数据，2025 年 Q4 桌面独显板卡出货 NVIDIA 约 94%、AMD 降到 5%、Intel 约 1%，2026 年才小幅回到 90% / 8% / 2%。但份额是产能和渠道堆出来的，不等于卡更好。落到具体产品上，NVIDIA 在光追、AI 生态、驱动适配上仍然领先，AMD 靠 RDNA 4 发力，纯光栅跑分已经追到并排，有几张卡还能压过 N 卡。AI 热潮把产能抽向数据中心 GPU，NVIDIA 仍是默认选择，但 AMD 已经不能当空气看了。所以，还是分析下这几张卡的具体数据。
+      </p>
+      <p><b>旗舰与次旗舰之争：A 卡纯光栅登顶</b></p>
+      <p>纯光栅的结果有点意外：RX 9070 XT 以约 30,700 分拿下这九张卡的头名，比 RTX 4080（约 28,200 分）高出一截，RTX 5070 Ti（约 27,900 分）排在后面——上代旗舰 4080 反而压着新出的 5070 Ti 一头，核心规模的老底子还在。RDNA 4 的进步确实兑现了：光比传统光栅，AMD 已经能跟 N 卡正面掰手腕。不过 Time Spy 不测光追和 AI 超分，后面的游戏实测里，N 卡会在这些项目上扳回来。</p>
+      <p><b>主流甜点级对决：AMD 阵营厚度占优</b></p>
+      <p>RX 9070（约 26,800 分）的纯光栅直逼层级一的 RTX 5070 Ti，跟自家大哥 9070 XT 也只差一成多；RTX 5070（约 22,400 分）和 RX 9070 GRE（约 22,000 分）咬得死紧，基本一条水平线；已经停产的 RTX 4070 Ti（约 23,200 分）还能稳稳压住这一档，老旗舰的底子还在。主流价位上 AMD 的产品线更厚实，性价比优势在这一档尤其明显。</p>
+      <p><b>入门高端：8GB / 16GB 梯队打平</b></p>
+      <p>RX 9060 XT 16G（约 16,500 分）和 RTX 5060 Ti 8G（约 16,000 分）就差 4% 以内，公开跑分基本分不出胜负——可一个是 16GB 显存、一个是 8GB，后面的《无主之地4》实测会说明，这一代游戏里显存容量往往比跑分数字更要命。</p>
+      <p>当然跑分不等于实际体验。跑分体现不了显存容量、光追性能，也体现不了 DLSS/FSR 这类 AI 超分的作用。举个例子，8GB
+        显存的卡在 4K 下很容易爆显存，而 NVIDIA 在光追和 AI
+        算力上的生态优势，纯光栅跑分里也看不出来。所以真到买的时候，除了跑分，还得看你要玩什么、开多高分辨率、需不需要
+        AI 创作这类生产力场景，综合着来比较。</p>
+    </div>
+
+    <div class="my-card">
+      <h2 id="sec-performance">三、详细性能对比</h2>
+      <p style="text-align:center;"><b>RTX 4080 / RTX 5070 Ti / RX 9070 XT 基本参数</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>参数项目</th>
+              <th><img src="image/4080.png" alt="RTX 4080" width="150" height="150">
+                <br>RTX 4080
+              </th>
+              <th><img src="image/5070Ti.png" alt="RTX 5070 Ti" width="150" height="150">
+                <br>RTX 5070 Ti
+              </th>
+              <th><img src="image/9070XT.png" alt="RX 9070 XT" width="150" height="150">
+                <br>RX 9070 XT
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>架构</td>
+              <td>Ada Lovelace</td>
+              <td>Blackwell</td>
+              <td>RDNA 4</td>
+            </tr>
+            <tr>
+              <td>制程工艺</td>
+              <td>台积电 4N（5nm 定制）</td>
+              <td>台积电 4N</td>
+              <td>台积电 N4 / 4nm</td>
+            </tr>
+            <tr>
+              <td>核心代号</td>
+              <td>AD103</td>
+              <td>GB203</td>
+              <td>Navi 48</td>
+            </tr>
+            <tr>
+              <td>CUDA / 流处理器</td>
+              <td>9728</td>
+              <td>8960</td>
+              <td>4096 流处理器</td>
+            </tr>
+            <tr>
+              <td>光追单元</td>
+              <td>76 个第三代 RT Core</td>
+              <td>70 个第四代 RT Core</td>
+              <td>64 个第三代 Ray Accelerator</td>
+            </tr>
+            <tr>
+              <td>AI 加速单元</td>
+              <td>304 个第四代 Tensor Core</td>
+              <td>280 个第五代 Tensor Core</td>
+              <td>128 个第二代 AI 加速器</td>
+            </tr>
+            <tr>
+              <td>基础频率</td>
+              <td>2205 MHz</td>
+              <td>2295 MHz</td>
+              <td>1660 MHz（游戏频率 2400 MHz）</td>
+            </tr>
+            <tr>
+              <td>加速频率</td>
+              <td>2505 MHz</td>
+              <td>2452 MHz</td>
+              <td>2970 MHz</td>
+            </tr>
+            <tr>
+              <td>显存容量</td>
+              <td>16GB</td>
+              <td>16GB</td>
+              <td>16GB</td>
+            </tr>
+            <tr>
+              <td>显存类型</td>
+              <td>GDDR6X</td>
+              <td>GDDR7</td>
+              <td>GDDR6</td>
+            </tr>
+            <tr>
+              <td>显存位宽</td>
+              <td>256-bit</td>
+              <td>256-bit</td>
+              <td>256-bit</td>
+            </tr>
+            <tr>
+              <td>显存速率</td>
+              <td>22.4 Gbps</td>
+              <td>28 Gbps</td>
+              <td>20 Gbps</td>
+            </tr>
+            <tr>
+              <td>显存带宽</td>
+              <td>716.8 GB/s</td>
+              <td>896 GB/s</td>
+              <td>640 GB/s</td>
+            </tr>
+            <tr>
+              <td>L2 缓存</td>
+              <td>64MB</td>
+              <td>48MB</td>
+              <td>64MB（Infinity Cache）</td>
+            </tr>
+            <tr>
+              <td>TGP / TDP 功耗</td>
+              <td>320W</td>
+              <td>300W</td>
+              <td>304W</td>
+            </tr>
+            <tr>
+              <td>推荐电源</td>
+              <td>750W</td>
+              <td>750W</td>
+              <td>750W</td>
+            </tr>
+            <tr>
+              <td>供电接口</td>
+              <td>16-pin（12VHPWR）</td>
+              <td>16-pin（12V-2x6）</td>
+              <td>8-pin × 2</td>
+            </tr>
+            <tr>
+              <td>PCIe 接口</td>
+              <td>PCIe 4.0 × 16</td>
+              <td>PCIe 5.0 × 16</td>
+              <td>PCIe 5.0 × 16</td>
+            </tr>
+            <tr>
+              <td>显示输出</td>
+              <td>HDMI 2.1b + DP 1.4a</td>
+              <td>HDMI 2.1b + DP 2.1b</td>
+              <td>HDMI 2.1b + DP 2.1a</td>
+            </tr>
+            <tr>
+              <td>首发时间</td>
+              <td>2022 年 11 月</td>
+              <td>2025 年 2 月</td>
+              <td>2025 年 3 月</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>差异解读</h3>
+      <p><b>1. 核心规模：RTX 4080 最大，RX 9070 XT 靠高频和架构效率</b></p>
+      <p>RTX 4080 有 9728 个 CUDA 核心，是三款里规模最大的，FP32 峰值性能约 48.74 TFLOPS，略高于 RX 9070 XT 的 48.7
+        TFLOPS，也高过 RTX 5070 Ti 的 43.94 TFLOPS。</p>
+      <p>RTX 5070 Ti 的 CUDA 反而少一些，只有 8960 个，靠 Blackwell 架构、更高的显存带宽和新版 Tensor Core 把规模差距补了回来。</p>
+      <p>RX 9070 XT 的流处理器才 4096 个，看着远不如两张 N 卡，但这数不能跟 CUDA 直接划等号。RDNA 4
+        的单核效率、频率策略、Infinity Cache 设计都不同，AMD 走的是<b>高频 + 新架构 + 大缓存</b>的路子，不是傻堆核心。</p>
+
+      <p><b>2. 显存子系统：RTX 5070 Ti 带宽最强，RX 9070 XT 带宽最低</b></p>
+      <p>三款都是 16GB / 256-bit，可显存类型差得远：</p>
+      <ul>
+        <li>RTX 5070 Ti：16GB GDDR7，28 Gbps，带宽约 896 GB/s</li>
+        <li>RTX 4080：16GB GDDR6X，22.4 Gbps，带宽约 716.8 GB/s</li>
+        <li>RX 9070 XT：16GB GDDR6，20 Gbps，带宽约 640 GB/s</li>
+      </ul>
+      <p>落到体验上：</p>
+      <ul>
+        <li>RTX 5070 Ti 显存最先进，高负载、高分辨率、AI 纹理场景下更占优。</li>
+        <li>RTX 4080 带宽居中，但核心规模大，传统光栅还是很能打。</li>
+        <li>RX 9070 XT 带宽最低，靠 64MB Infinity Cache 顶着。1080P / 2K 下差别不大，到了 4K、高材质、高光追，带宽短板就容易露馅。</li>
+      </ul>
+      <p><b>3. 光追硬件：RTX 5070 Ti 最新，RTX 4080 成熟，RX 9070 XT 进步明显</b></p>
+      <p>光追这块，三款卡的差距比纯光栅更大。</p>
+      <p>RTX 5070 Ti 上的是第四代 RT Core，官方说光追算力提升约 44%。它强的不只是光追单元数量，还有 NVIDIA
+        在光追降噪、DLSS 重建、驱动优化、游戏适配上的成熟度。</p>
+      <p>RTX 4080 用第三代 RT Core，架构比 5070 Ti 老一代，但核心规模大，光追依旧很强，高画质光追游戏里表现稳定。</p>
+      <p>RX 9070 XT 是 RDNA 4 的 64 个光追加速器，比上代 A 卡进步巨大，早不是过去那种"光追明显偏科"的 A 卡了。在不少支持 FSR 4 / FSR 4.1
+        的游戏里，光追体验已经能摸到 RTX 5070 Ti 的边。</p>
+      <p>不过路径追踪、重度光追、复杂反射、全局光照这些场景，还是 NVIDIA 更稳。</p>
+
+      <p><b>4. AI 算力：RTX 5070 Ti 最强，RX 9070 XT 补强但生态仍落后</b></p>
+      <p>AI 和超分，是三款卡差距最大的地方。</p>
+      <p>RTX 5070 Ti 是第五代 Tensor Core，AI 推理性能提升约 119%，还支持 DLSS 4 多帧生成，AI
+        超分、帧生成、AI 生图、视频编码、本地推理上都有明显优势。</p>
+      <p>RTX 4080 是第四代 Tensor Core，支持 DLSS 3 和部分新特性，AI 硬件的代际比 5070 Ti 低一档。</p>
+      <p>RX 9070 XT 配 128 个 AI 加速器，支持 FP8 加速，峰值 FP8 矩阵性能能到 389 TFLOPS，开结构化稀疏后 779
+        TFLOPS。AMD 这次在 AI 硬件上确实下本了，FSR 4 / FSR 4.1 也比过去的 FSR 3 强不少。</p>
+      <p>但差距不止在硬件，更在生态。</p>
+      <p>DLSS 支持的游戏更多、画质更稳、帧生成更成熟；FSR 虽然开放，游戏覆盖和画质一致性还是差一截。</p>
+      <p><b>5. 功耗与供电：三者接近，但 RX 9070 XT 装机更友好</b></p>
+      <p>三款公版功耗都在 300W-320W：</p>
+      <ul>
+        <li>RTX 4080：320W</li>
+        <li>RTX 5070 Ti：300W</li>
+        <li>RX 9070 XT：304W</li>
+      </ul>
+      <p>推荐电源基本都在 750W 左右。</p>
+      <p>供电接口体验不一样：</p>
+      <ul>
+        <li>RTX 4080：16-pin</li>
+        <li>RTX 5070 Ti：16-pin 12V-2x6</li>
+        <li>RX 9070 XT：2×8-pin</li>
+      </ul>
+      <p>RX 9070 XT 对老电源、传统装机更友好，不用转接线；两张 N 卡更依赖 16-pin，装机时记得把插头怼紧。</p>
+      <p><b>6. 接口规格：RTX 5070 Ti 和 RX 9070 XT 更新</b></p>
+      <p>RTX 5070 Ti 和 RX 9070 XT 都支持 PCIe 5.0，显示输出也更新：</p>
+      <ul>
+        <li>RTX 5070 Ti：PCIe 5.0，DP 2.1b + HDMI 2.1b</li>
+        <li>RX 9070 XT：PCIe 5.0，DP 2.1a + HDMI 2.1b</li>
+        <li>RTX 4080：PCIe 4.0，HDMI 2.1b + DP 1.4a</li>
+      </ul>
+      <p>要是你接 4K 高刷屏、8K 屏，或者以后想升高带宽显示设备，5070 Ti 和 9070 XT 的接口更有余量。</p>
+      <p><b>7. 市场与定位差异</b></p>
+      <p>RTX 4080 是 2022 年的高端旗舰底子，核心规模大、传统光栅强，但架构、AI 硬件、接口都算不上新了。</p>
+      <p>RTX 5070 Ti 是 Blackwell 的主流高端卡，首发 6299 元，主打 2K 高刷、4K 游戏、DLSS 4 和 AI
+        生产力，胜在架构新、带宽高、AI 强、DLSS 生态熟。</p>
+      <p>RX 9070 XT 是 AMD RDNA 4 的高端主力，首发 4999 元起，主打高性能光栅、补强后的光追、FSR 4，价格更友好。优势是性价比和传统游戏性能，短板是
+        AI 生态、路径追踪和显存带宽。
+      </p>
+
+      <h3 id="tier-1">实际游戏帧率对比（层级一）</h3>
+      <p>理论参数只能说明纸面实力，真正决定体验的还是在具体游戏里的表现。下面从 1080P、2K、4K 三档分辨率，以及光追开关、AI
+        超分四个维度，对 RTX 4080、RTX 5070 Ti、RX 9070 XT 进行横向对比。</p>
+      <blockquote>
+        说明：以下帧率为综合测试环境下的参考值，不同 CPU、驱动版本、画质预设会有浮动，主要用于判断相对强弱关系。
+      </blockquote>
+
+      <p><b>1. 1080P：三款卡都轻松，差距被 CPU 抹平</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4080</th>
+              <th>RTX 5070 Ti</th>
+              <th>RX 9070 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《CS2》高画质</td>
+              <td>约 430-470 FPS</td>
+              <td>约 405-540 FPS</td>
+              <td>约 437-573 FPS</td>
+            </tr>
+            <tr>
+              <td>《地平线5》高画质</td>
+              <td>约 210-230 FPS</td>
+              <td>约 200-220 FPS</td>
+              <td>约 190-210 FPS</td>
+            </tr>
+            <tr>
+              <td>《古墓丽影：暗影》高画质</td>
+              <td>约 280-300 FPS</td>
+              <td>约 270-290 FPS</td>
+              <td>约 250-270 FPS</td>
+            </tr>
+            <tr>
+              <td>《荒野大镖客2》高画质</td>
+              <td>约 170-185 FPS</td>
+              <td>约 160-175 FPS</td>
+              <td>约 152-165 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地3》高画质</td>
+              <td>约 165-180 FPS</td>
+              <td>约 155-170 FPS</td>
+              <td>约 160-175 FPS</td>
+            </tr>
+            <tr>
+              <td>《巫师3》重制版 最高画质</td>
+              <td>约 160 FPS</td>
+              <td>约 153 FPS</td>
+              <td>约 142 FPS</td>
+            </tr>
+            <tr>
+              <td>《黑神话：悟空》高画质</td>
+              <td>约 95-105 FPS</td>
+              <td>约 90-100 FPS</td>
+              <td>约 97 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质</td>
+              <td>约 91 FPS</td>
+              <td>约 90 FPS</td>
+              <td>约 78 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>1080P 分辨率下，三款卡都属于性能过剩状态。传统光栅游戏里，帧率往往被 CPU 和游戏引擎限制，RTX 4080 与 RTX 5070 Ti 差距很小，RX 9070 XT
+        在《CS2》《无主之地3》这类游戏中甚至能反超。</p>
+      <p>但《影之刃零》是个例外。这款虚幻引擎5动作游戏对显卡压力较大，1080P 原生最高画质下三款卡都只能跑到 78-91 FPS，说明它对硬件的要求已经接近 3A 大作的 2K
+        水准。</p>
+
+      <p><b>2. 2K：三款卡最合适的战场</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4080</th>
+              <th>RTX 5070 Ti</th>
+              <th>RX 9070 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《地平线5》高画质</td>
+              <td>约 205 FPS</td>
+              <td>约 188-201 FPS</td>
+              <td>约 175-204 FPS</td>
+            </tr>
+            <tr>
+              <td>《古墓丽影：暗影》高画质</td>
+              <td>约 248 FPS</td>
+              <td>约 234-253 FPS</td>
+              <td>约 190-266 FPS</td>
+            </tr>
+            <tr>
+              <td>《荒野大镖客2》高画质</td>
+              <td>约 165 FPS</td>
+              <td>约 161 FPS</td>
+              <td>约 178-181 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地3》高画质</td>
+              <td>约 140 FPS</td>
+              <td>约 131 FPS</td>
+              <td>约 162-168 FPS</td>
+            </tr>
+            <tr>
+              <td>《巫师3》重制版 最高画质</td>
+              <td>约 108 FPS</td>
+              <td>约 102 FPS</td>
+              <td>约 118 FPS</td>
+            </tr>
+            <tr>
+              <td>《黑神话：悟空》高画质</td>
+              <td>约 76 FPS</td>
+              <td>约 68-71 FPS</td>
+              <td>约 57-59 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质</td>
+              <td>约 68 FPS</td>
+              <td>约 68 FPS</td>
+              <td>约 62 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>2K 是三款卡定位最匹配的分辨率，也是差异最容易被看出来的档位。RX 9070 XT 在传统光栅游戏（《荒野大镖客2》《无主之地3》《巫师3》《古墓丽影：暗影》）里能领先两张 N
+        卡，这是 RDNA 4 架构和 64MB Infinity Cache 的功劳。</p>
+      <p>但优化偏向 N 卡的游戏里情况反转：《黑神话：悟空》RX 9070 XT 只有 57-59 FPS，落后 RTX 5070 Ti 的 68-71 FPS。《影之刃零》原生差距不大（62-68
+        FPS），但一开光追 RX 9070 XT 直接掉到约 43 FPS，跌破 60 FPS 流畅线，而两张 N 卡还能维持在 55 FPS 左右——光追负载会明显放大 AMD 的差距。</p>
+
+      <p><b>3. 4K：原生压力陡增，《影之刃零》跌破流畅线</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4080</th>
+              <th>RTX 5070 Ti</th>
+              <th>RX 9070 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《地平线5》高画质</td>
+              <td>约 150 FPS</td>
+              <td>约 137-149 FPS</td>
+              <td>约 124-146 FPS</td>
+            </tr>
+            <tr>
+              <td>《古墓丽影：暗影》高画质</td>
+              <td>约 148 FPS</td>
+              <td>约 126-132 FPS</td>
+              <td>约 108-120 FPS</td>
+            </tr>
+            <tr>
+              <td>《荒野大镖客2》高画质</td>
+              <td>约 110 FPS</td>
+              <td>约 105 FPS</td>
+              <td>约 119 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地3》高画质</td>
+              <td>约 98 FPS</td>
+              <td>约 95 FPS</td>
+              <td>约 97 FPS</td>
+            </tr>
+            <tr>
+              <td>《巫师3》重制版 最高画质</td>
+              <td>约 64 FPS</td>
+              <td>约 61 FPS</td>
+              <td>约 57 FPS</td>
+            </tr>
+            <tr>
+              <td>《黑神话：悟空》高画质</td>
+              <td>约 66 FPS</td>
+              <td>约 63 FPS</td>
+              <td>约 61 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质</td>
+              <td>约 39 FPS</td>
+              <td>约 39 FPS</td>
+              <td>约 36 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>4K 原生下 RX 9070 XT 的 Infinity Cache 仍能发挥作用，《古墓丽影：暗影》《荒野大镖客2》里甚至能领先。但《影之刃零》是明显分水岭：4K
+        原生最高画质三款卡都只有 36-39 FPS，全部无法流畅运行；开启路径追踪后更是跌到 20-25 FPS，基本失去可玩性，必须依赖 AI 超分。</p>
+
+      <p><b>4. 4K 光追 / 路径追踪 + AI 超分：差距最大，架构代差显现</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4080</th>
+              <th>RTX 5070 Ti</th>
+              <th>RX 9070 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《赛博朋克2077》光追 + 超分</td>
+              <td>约 120-135 FPS</td>
+              <td>约 140-162 FPS</td>
+              <td>约 105-120 FPS</td>
+            </tr>
+            <tr>
+              <td>《瘟疫传说：安魂曲》光追 + 超分</td>
+              <td>约 80-90 FPS</td>
+              <td>约 90-100 FPS</td>
+              <td>约 70-80 FPS</td>
+            </tr>
+            <tr>
+              <td>《心灵杀手2》光追 + 超分</td>
+              <td>约 70-80 FPS</td>
+              <td>约 85-95 FPS</td>
+              <td>约 60-70 FPS</td>
+            </tr>
+            <tr>
+              <td>《黑神话：悟空》光追 + 超分</td>
+              <td>约 75-85 FPS</td>
+              <td>约 80-90 FPS</td>
+              <td>约 65-75 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》路径追踪 原生</td>
+              <td>约 25 FPS</td>
+              <td>约 25 FPS</td>
+              <td>约 20 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》4K 路径追踪 + 超分</td>
+              <td>约 82 FPS</td>
+              <td>约 160-217 FPS</td>
+              <td>约 117 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>这一档差距最大，最能看出架构代差。《影之刃零》路径追踪是最高光追等级，一开就掉约 55% 性能，4K 原生路径追踪只剩 20-25
+        FPS，根本没法原生跑。开了 AI 超分之后，局面就变了：</p>
+      <ul>
+        <li>RTX 5070 Ti：DLSS 4.5 多帧生成，4K 路径追踪能到 160 FPS，开 6X 帧生成冲到 217 FPS，是唯一能在 4K 路径追踪下拿到高刷体验的。</li>
+        <li>RX 9070 XT：FSR 帧生成后约 117 FPS，反而超过了 RTX 4080。</li>
+        <li>RTX 4080：卡在 DLSS 3 只支持最高 2X 帧生成，4K 路径追踪约 82 FPS，能玩，但帧率上限被硬件代际锁死了。</li>
+      </ul>
+      <p>这是 RTX 4080 最尴尬的地方：传统光栅还是最强或并列最强，可到了最吃 AI 硬件的新一代光追场景，反而被两张新卡超了过去。</p>
+      <p>一句话收尾：只玩传统游戏，RX 9070 XT 性价比最高；要 4K 光追和 AI 超分的完整体验，RTX 5070 Ti 是唯一答案；RTX 4080 则是性能还在、但技术代际已经落后半拍的老将。</p>
+
+      <h3 id="tier-2">层级二：RX 9070 / RTX 5070 / RX 9070 GRE</h3>
+      <p>这三款都是 2025 年上市的主流卡，按跑分、参数、1080P / 2K / 4K 帧数、光追与超分的顺序整理，口径跟层级一一致。</p>
+
+      <p><b>1. 已知数据：3DMark 跑分与定位</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th>RX 9070</th>
+              <th>RTX 5070</th>
+              <th>RX 9070 GRE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>3DMark Time Spy 图形分</td>
+              <td>约 26,800 分</td>
+              <td>约 22,400 分</td>
+              <td>约 22,000 分</td>
+            </tr>
+            <tr>
+              <td>公开 Time Spy Extreme 图形分</td>
+              <td>约 12,650 分</td>
+              <td>约 10,700 分</td>
+              <td>约 10,400 分</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>这一层纯光栅跑分顺序是 RX 9070（约 26,800）＞ RTX 5070（约 22,400）≈ RX 9070 GRE（约 22,000）。RX 9070 的图形分已经逼近层级一的 RTX 5070 Ti，这是 RDNA 4 中端的真实实力；RTX 5070 和 RX 9070 GRE 跑分只差 2% 左右，真要比，胜负手在显存生态和价格，不在跑分。</p>
+
+      <p><b>2. 基本参数（官方规格）</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>参数项目</th>
+              <th><img src="image/9070.png" alt="RX 9070" width="150" height="150">
+                <br>RX 9070
+              </th>
+              <th><img src="image/5070.png" alt="RTX 5070" width="150" height="150">
+                <br>RTX 5070
+              </th>
+              <th><img src="image/9070GRE.png" alt="RX 9070 GRE" width="150" height="150">
+                <br>RX 9070 GRE
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>架构 / 核心代号</td>
+              <td>RDNA 4 / Navi 48</td>
+              <td>Blackwell / GB205</td>
+              <td>RDNA 4 / Navi 48 XL</td>
+            </tr>
+            <tr>
+              <td>CUDA / 流处理器</td>
+              <td>56 CU / 3584 流处理器</td>
+              <td>6144 CUDA</td>
+              <td>48 CU / 3072 流处理器</td>
+            </tr>
+            <tr>
+              <td>显存容量 / 类型 / 位宽</td>
+              <td>16GB GDDR6 / 256-bit</td>
+              <td>12GB GDDR7 / 192-bit</td>
+              <td>12GB GDDR6 / 192-bit</td>
+            </tr>
+            <tr>
+              <td>显存速率 / 带宽</td>
+              <td>20 Gbps / 640 GB/s</td>
+              <td>28 Gbps / 672 GB/s</td>
+              <td>18 Gbps / 432 GB/s</td>
+            </tr>
+            <tr>
+              <td>TGP / 推荐电源 / 供电接口</td>
+              <td>220W / 650W / 2×8-pin</td>
+              <td>250W / 650W / 16-pin（附 2×8-pin 转接）</td>
+              <td>220W / 650W / 2×8-pin</td>
+            </tr>
+            <tr>
+              <td>PCIe / 显示输出</td>
+              <td>PCIe 5.0 x16 / DP 2.1a + HDMI 2.1b</td>
+              <td>PCIe 5.0 x16 / DP 2.1b + HDMI 2.1b</td>
+              <td>PCIe 5.0 x16 / DP 2.1a + HDMI 2.1b</td>
+            </tr>
+            <tr>
+              <td>国行首发价（2025 年）</td>
+              <td>¥4,499</td>
+              <td>¥4,599</td>
+              <td>¥4,199</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>以上为 AMD / NVIDIA 官方参考规格，非公版型号的频率、供电与散热会有差异。国行首发价取自中国官网及首发报道，均为 2025 年首发价，不代表
+        2026 年 11 月现价；RX 9070 GRE 为中国特供型号，2025 年 4 月上架、4,199 元起。</p>
+
+      <p><b>3. 1080P 游戏帧数</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RX 9070</th>
+              <th>RTX 5070</th>
+              <th>RX 9070 GRE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《影之刃零》最高画质（关光追）</td>
+              <td>71.4 FPS</td>
+              <td>73.6 FPS</td>
+              <td>64.4 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质 + 光追</td>
+              <td>53.6 FPS</td>
+              <td>63.4 FPS</td>
+              <td>48.3 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地4》最高画质</td>
+              <td>59.6 FPS</td>
+              <td>49.4 FPS</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>1080P 下三卡都能跑动这两款游戏。《影之刃零》纯光栅下 RTX 5070 和 RX 9070 基本持平（73.6 对 71.4 FPS），一开光追差距立刻拉开——RTX 5070 领先约
+        18%（63.4 对 53.6 FPS），RX 9070 GRE 光栅落后约 10%、光追落后约 24%。《无主之地4》压力更大，RX 9070 反超 RTX 5070 约 21%（59.6 对 49.4
+        FPS）；RX 9070 GRE 没找到同口径数据，这里留空。</p>
+
+      <p><b>4. 2K 游戏帧数</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RX 9070</th>
+              <th>RTX 5070</th>
+              <th>RX 9070 GRE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《影之刃零》最高画质（关光追）</td>
+              <td>56.4 FPS</td>
+              <td>53.5 FPS</td>
+              <td>49.2 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质 + 光追</td>
+              <td>42.8 FPS</td>
+              <td>44.0 FPS</td>
+              <td>34.4 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地4》最高画质</td>
+              <td>41.8 FPS</td>
+              <td>33.8 FPS</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>2K 是这三张卡的目标分辨率，可《影之刃零》最高画质原生没一张能稳过 60 帧（56.4 / 53.5 / 49.2 FPS），光追再跌到 34-44
+        FPS；这一档的 60 帧守门员正好是 RX 9070。《无主之地4》原生压力更大，RX 9070 领先 RTX 5070 约 24%。RX 9070 GRE 在 2K 光追下只剩 34.4
+        FPS，建议开 FSR 超分再玩。</p>
+
+      <p><b>5. 4K 游戏帧数</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RX 9070</th>
+              <th>RTX 5070</th>
+              <th>RX 9070 GRE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《影之刃零》最高画质（关光追）</td>
+              <td>31.4 FPS</td>
+              <td>30.1 FPS</td>
+              <td>27.5 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质 + 光追</td>
+              <td>24.3 FPS</td>
+              <td>23.7 FPS</td>
+              <td>19.0 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地4》最高画质</td>
+              <td>21.8 FPS</td>
+              <td>15.2 FPS</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>4K 原生对这一层三卡都不可玩（全在 35 FPS 以下），超分成必选项。《影之刃零》光追下三卡差距收窄到 24.3 / 23.7 / 19.0
+        FPS，架构差距被游戏本身的重负载抹平了；《无主之地4》里 RTX 5070 只有 15.2 FPS，跟 RX 9070（21.8 FPS）拉开约
+        43%——这游戏对显存和驱动极敏感，把两者差距放大了。RX 9070 GRE 没找到该游戏同口径数据，留空。</p>
+
+      <p><b>6. 光追 / 路径追踪 + AI 超分</b></p>
+      <p>光追上，RTX 5070 的优势随分辨率提高而收窄：1080P 领先 RX 9070 约 18%，到 4K 已基本持平（23.7 对 24.3
+        FPS）；RX 9070 GRE 光追全面落后，4K 光追只剩 19.0 FPS。</p>
+      <p>超分与帧生成：RTX 5070 支持 DLSS 4 / 4.5 多帧生成（最高 6X），《影之刃零》4K 路径追踪 + DLSS 6X 实测能到 173 FPS（1% Low
+        117），1440P 6X 达 245 FPS；RX 9070 和 RX 9070 GRE 的 FSR 帧生成只到 2X，支持的游戏也少。开超分后，RTX 5070 的领先收窄到约
+        6-9%。显存上，《影之刃零》4K 光追约需 11GB、路径追踪约 13GB、多帧生成约 14GB，这一层的 12GB / 16GB 比层级三的 8GB 卡从容得多。</p>
+
+      <h3 id="tier-3">层级三：RTX 4070 Ti / RTX 5060 Ti 8G / RX 9060 XT</h3>
+      <p>本层级延续同样的结构和口径，型号统一写全（RTX 5060 Ti 8G / RX 9060 XT）。RTX 4070 Ti 已停产、不参与价格对比；RX 9060 XT 有 8GB /
+        16GB 两个版本，两版数据并列标注。</p>
+
+      <p><b>1. 已知数据：3DMark 跑分与定位</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>项目</th>
+              <th>RTX 4070 Ti</th>
+              <th>RTX 5060 Ti 8G</th>
+              <th>RX 9060 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>3DMark Time Spy 图形分</td>
+              <td>约 23,200 分</td>
+              <td>约 16,000 分（8GB）</td>
+              <td>约 16,300 分（16GB 约 16,500）</td>
+            </tr>
+            <tr>
+              <td>公开 Time Spy Extreme 图形分</td>
+              <td>约 10,970 分</td>
+              <td>约 7,260 分</td>
+              <td>约 7,230 分（16GB）/ 6,940（8GB）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>这一层跑分顺序是 RTX 4070 Ti（约 23,200）＞ RX 9060 XT 16G（约 16,500）≈ RTX 5060 Ti 8G（约 16,000），跟下文游戏实测的强弱基本一致。4070 Ti 凭老旗舰级核心规模领先整整一档；9060 XT 和 5060 Ti 跑分相差不到 4%，公开数据分不出高下，胜负手在显存容量和游戏适配。</p>
+
+      <p><b>2. 基本参数（官方规格）</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>参数项目</th>
+              <th><img src="image/4070Ti.png" alt="RTX 4070 Ti" width="150" height="150">
+                <br>RTX 4070 Ti
+              </th>
+              <th><img src="image/5060ti.png" alt="RTX 5060 Ti 8G" width="150" height="150">
+                <br>RTX 5060 Ti 8G
+              </th>
+              <th><img src="image/9060XT.png" alt="RX 9060 XT" width="150" height="150">
+                <br>RX 9060 XT
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>架构 / 核心代号</td>
+              <td>Ada Lovelace / AD104-400</td>
+              <td>Blackwell / GB206-300</td>
+              <td>RDNA 4 / Navi 44</td>
+            </tr>
+            <tr>
+              <td>CUDA / 流处理器</td>
+              <td>7680 CUDA</td>
+              <td>4608 CUDA</td>
+              <td>32 CU / 2048 流处理器</td>
+            </tr>
+            <tr>
+              <td>显存容量 / 类型 / 位宽</td>
+              <td>12GB GDDR6X / 192-bit</td>
+              <td>8GB GDDR7 / 128-bit</td>
+              <td>8GB 或 16GB GDDR6 / 128-bit</td>
+            </tr>
+            <tr>
+              <td>显存速率 / 带宽</td>
+              <td>21 Gbps / 504 GB/s</td>
+              <td>28 Gbps / 448 GB/s</td>
+              <td>20 Gbps / 320 GB/s</td>
+            </tr>
+            <tr>
+              <td>TGP / 推荐电源 / 供电接口</td>
+              <td>285W / 700W / 16-pin</td>
+              <td>180W / 600W / 1×8-pin</td>
+              <td>150W（8G）/ 160W（16G）/ 550-650W / 1×8-pin</td>
+            </tr>
+            <tr>
+              <td>PCIe / 显示输出</td>
+              <td>PCIe 4.0 x16 / 3×DP 1.4a + HDMI 2.1</td>
+              <td>PCIe 5.0 x8 / 3×DP 2.1b + HDMI 2.1b</td>
+              <td>PCIe 5.0 x16 / DP 2.1a + HDMI 2.1b</td>
+            </tr>
+            <tr>
+              <td>国行首发价</td>
+              <td>¥6,499（2023-01，已停产，不参与价格对比）</td>
+              <td>¥3,199（2025-04）</td>
+              <td>¥2,499（8G）/ ¥2,899（16G）（2025-06）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>以上是 AMD / NVIDIA 官方参考规格，非公版型号会有差异。RTX 4070 Ti 于 2023 年 1 月以 6,499 元首发、现已停产；RTX 5060 Ti 8G 和 RX 9060 XT
+        都是 2025 年的 8GB 级主流卡，后者另有 16GB 版。要跑 4K / 高画质，优先选 16GB。</p>
+
+      <p><b>3. 1080P 游戏帧数</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4070 Ti</th>
+              <th>RTX 5060 Ti 8G</th>
+              <th>RX 9060 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《影之刃零》最高画质（关光追）</td>
+              <td>78.7 FPS</td>
+              <td>58.0 FPS</td>
+              <td>52.1 FPS（8G / 16G 相同）</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质 + 光追</td>
+              <td>66.4 FPS</td>
+              <td>49.7 FPS</td>
+              <td>8G 36.7 / 16G 38.0 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地4》最高画质</td>
+              <td>59.1 FPS</td>
+              <td>25.6 FPS</td>
+              <td>8G 33.2 / 16G 40.6 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>1080P 下 RTX 4070 Ti 凭老旗舰级核心规模仍是本层第一（光栅 78.7、光追 66.4 FPS）。RTX 5060 Ti 8G 和 RX 9060 XT 在《影之刃零》里分别是 58.0 和 52.1
+        FPS，光追下 RTX 5060 Ti 领先约 25-35%；可《无主之地4》反了过来——RX 9060 XT 16G（40.6 FPS）明显好于 RTX 5060 Ti 8G（25.6
+        FPS），这游戏显存占用极高，8GB 版本压力很大。</p>
+
+      <p><b>4. 2K 游戏帧数</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4070 Ti</th>
+              <th>RTX 5060 Ti 8G</th>
+              <th>RX 9060 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《影之刃零》最高画质（关光追）</td>
+              <td>57.3 FPS</td>
+              <td>41.7 FPS</td>
+              <td>8G 37.0 / 16G 37.7 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质 + 光追</td>
+              <td>46.4 FPS</td>
+              <td>33.7 FPS</td>
+              <td>8G 24.9 / 16G 26.1 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地4》最高画质</td>
+              <td>39.9 FPS</td>
+              <td>10.4 FPS</td>
+              <td>8G 16.9 / 16G 26.7 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>2K 下 RTX 4070 Ti 是本层唯一接近 60 帧的（《影之刃零》57.3 FPS）。《无主之地4》里 RTX 5060 Ti 8G 掉到 10.4 FPS——这是 8GB
+        显存在 2K 以上耗尽导致的，帧率已经不代表 GPU 算力了；RX 9060 XT 16G 的 26.7 FPS 也只能勉强玩，8G 版更低到 16.9 FPS。</p>
+
+      <p><b>5. 4K 游戏帧数</b></p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4070 Ti</th>
+              <th>RTX 5060 Ti 8G</th>
+              <th>RX 9060 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《影之刃零》最高画质（关光追）</td>
+              <td>31.1 FPS</td>
+              <td>19.9 FPS</td>
+              <td>8G 18.2 / 16G 20.6 FPS</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》最高画质 + 光追</td>
+              <td>24.4 FPS</td>
+              <td>13.4 FPS</td>
+              <td>8G 9.0 / 16G 14.3 FPS</td>
+            </tr>
+            <tr>
+              <td>《无主之地4》最高画质</td>
+              <td>19.4 FPS</td>
+              <td>4.9 FPS</td>
+              <td>8G 8.4 / 16G 13.3 FPS</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>4K 原生对这一层三卡全都不可玩（30 FPS 以下），必须靠超分和帧生成。《无主之地4》4K 下 RTX 5060 Ti 8G 只有 4.9 FPS，在 30
+        款卡的横评表里跟 RTX 5060 并列垫底，同样是 8GB 显存耗尽；RX 9060 XT 16G（13.3 FPS）和 RTX 4070 Ti（19.4 FPS）是这一档相对好的选择。</p>
+
+      <p><b>6. 光追 / 路径追踪 + AI 超分</b></p>
+      <p>RTX 4070 Ti 是 Ada Lovelace（第三代 RT Core + 第四代 Tensor Core），只支持 DLSS 3 和最高 2X 帧生成，没有多帧生成；4K 路径追踪 + DLSS 2X
+        下，40 系里只有 RTX 4070 Ti / 4080 / 4090 能稳在 60 FPS 以上，1440P 下 RTX 4070 Ti 也能到基本流畅。RTX 5060 Ti 8G 是
+        Blackwell（第四代 RT Core + 第五代 Tensor Core），支持 DLSS 4 / 4.5 多帧生成最高 6X：《影之刃零》1080P 原生约 58-62 FPS，DLSS 质量档约
+        86、质量 + 6X 帧生成约 349 FPS；1080P 路径追踪原生 47、2X 88、6X 229，2K 原生 17、6X 91，4K 超分平衡 + 6X 88
+        FPS——帧生成能把原本玩不了的路径追踪拉进流畅区，但 8GB 显存是硬伤。RX 9060 XT 是 RDNA 4 / Navi 44，支持 FSR 4 / 4.1，帧生成只到
+        2X：1080P 原生约 52-56 FPS，FSR 质量档约 82、质量 + FG 约 155 FPS（8G 版）；16G 版在 1440P 领先 RTX 5060 Ti 8G 约
+        7.4%、4K 领先约 42.8%（后者一部分原因是 8G 卡爆显存）。</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>游戏 / 场景</th>
+              <th>RTX 4070 Ti</th>
+              <th>RTX 5060 Ti 8G</th>
+              <th>RX 9060 XT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>《影之刃零》1080P 最高画质 + 超分 / 帧生成</td>
+              <td></td>
+              <td>62 → 349 FPS（DLSS 质量 + 6X）</td>
+              <td>56 → 155 FPS（FSR 质量 + FG，8G）</td>
+            </tr>
+            <tr>
+              <td>《影之刃零》4K 路径追踪 + 超分 / 帧生成</td>
+              <td>约 60+ FPS（DLSS 2X）</td>
+              <td>PT 原生 7 → 6X 27；超分平衡 + 6X 88 FPS</td>
+              <td>约 31 FPS（超分 + FG，16G）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>说明一下：上面几节的帧数来自同一套测试平台（Ryzen 7 9800X3D、DDR5-6200，《影之刃零》Ultra /《无主之地4》Badass
+        预设，原生渲染、不开超分和帧生成），可以横向比；超分和路径追踪那两行是单卡实测，档位写在格子里，只看趋势就行。8GB 显存是这一层的共同约束：《影之刃零》4K
+        光追约需 11GB、路径追踪约 13GB、多帧生成约 14GB，《无主之地4》2K 以上 8GB 卡直接爆显存。</p>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="my-card">
+      <h2 id="sec-price">四、价格对比（2026 年 11 月 24 日采集）</h2>
+      <p>先把丑话说在前面：这轮行情里，同一张卡问三家店能报出三个价，上午的报价下午就作废。所以下面的数字只代表我采集当天的快照，下单前一定自己再核一遍。RTX
+        4080 和 RTX 4070 Ti 已经停产，市面上只剩二手和少量库存卡，不放进这次对比。</p>
+
+      <h3 id="price-1">1. 现价离首发价有多远</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>显卡</th>
+              <th>国行首发价</th>
+              <th>历史最低</th>
+              <th>当前全网最低</th>
+              <th>较首发价</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RTX 5070 Ti</td>
+              <td class="num">¥6,299</td>
+              <td class="num">¥5,733</td>
+              <td class="num">约 ¥10,200</td>
+              <td class="num">+62%</td>
+            </tr>
+            <tr>
+              <td>RX 9070 XT</td>
+              <td class="num">¥4,999</td>
+              <td class="num">¥3,848</td>
+              <td class="num">约 ¥6,049</td>
+              <td class="num">+21%</td>
+            </tr>
+            <tr>
+              <td>RX 9070</td>
+              <td class="num">¥4,499</td>
+              <td class="num">¥3,551</td>
+              <td class="num">约 ¥5,198</td>
+              <td class="num">+16%</td>
+            </tr>
+            <tr>
+              <td>RTX 5070</td>
+              <td class="num">¥4,599</td>
+              <td class="num">¥3,958</td>
+              <td class="num">约 ¥6,899</td>
+              <td class="num">+50%</td>
+            </tr>
+            <tr>
+              <td>RX 9070 GRE</td>
+              <td class="num">¥4,199</td>
+              <td class="num">¥2,899</td>
+              <td class="num">约 ¥4,058</td>
+              <td class="num">-3%</td>
+            </tr>
+            <tr>
+              <td>RTX 5060 Ti 8G</td>
+              <td class="num">¥3,199</td>
+              <td class="num">¥2,528</td>
+              <td class="num">约 ¥3,199</td>
+              <td class="num">持平</td>
+            </tr>
+            <tr>
+              <td>RX 9060 XT 8G</td>
+              <td class="num">¥2,499</td>
+              <td class="num">¥1,749</td>
+              <td class="num">约 ¥2,849</td>
+              <td class="num">+14%</td>
+            </tr>
+            <tr>
+              <td>RX 9060 XT 16G</td>
+              <td class="num">¥2,899</td>
+              <td class="num">¥2,195</td>
+              <td class="num">约 ¥3,694</td>
+              <td class="num">+27%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>规律一眼就能看出来：<b>N 卡溢价普遍比 A 卡狠</b>。5070 Ti 比首发贵了六成，5070 贵了五成；A 卡这边 9070 / 9070 XT
+        只贵一到两成，GRE 甚至贴着首发价卖——这一篇九张卡里，唯一没怎么涨的就是它。5060 Ti 8G 刚好回到首发价，算是矮子里的将军。</p>
+      <p class="note">「全网最低」几乎都出自拼多多、抖音的第三方店铺，低价规格库存很少，实际到手价常常比标价高；京东自营报价更贵，但旗舰型号经常直接缺货。历史最低价基本是
+        2025 年大促时的行情，看看就好，短期内别指望回去。</p>
+
+      <h3 id="price-2">2. 京东 / 淘宝 / 拼多多：同一天能差出多少</h3>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>显卡</th>
+              <th>京东自营</th>
+              <th>淘宝</th>
+              <th>拼多多</th>
+              <th>抖音</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RTX 5070 Ti</td>
+              <td class="num">12,792</td>
+              <td class="num">11,499</td>
+              <td class="num">11,764</td>
+              <td class="num">11,450</td>
+            </tr>
+            <tr>
+              <td>RX 9070 XT</td>
+              <td class="num">6,699</td>
+              <td class="num">5,999</td>
+              <td class="num">6,099</td>
+              <td class="num">6,139</td>
+            </tr>
+            <tr>
+              <td>RX 9070</td>
+              <td class="num">5,299</td>
+              <td class="num">5,290</td>
+              <td class="num">5,250</td>
+              <td class="num">5,349</td>
+            </tr>
+            <tr>
+              <td>RTX 5070</td>
+              <td class="num">8,599</td>
+              <td class="num">7,979</td>
+              <td class="num">7,898</td>
+              <td class="num">7,749</td>
+            </tr>
+            <tr>
+              <td>RX 9070 GRE</td>
+              <td class="num">4,399</td>
+              <td class="num">4,099</td>
+              <td class="num">4,118</td>
+              <td class="num">4,039</td>
+            </tr>
+            <tr>
+              <td>RX 9060 XT 16G</td>
+              <td class="num">4,199</td>
+              <td class="num">3,779</td>
+              <td class="num">3,599</td>
+              <td class="num">3,499</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">这张表是 11 月 1 日（本轮行情高点）的监测快照，单位元。当时 50 系平均溢价还挂在 74%。到 11
+        月中旬，中端卡普遍又回落了一截——5070 Ti 全网最低从 11,450 降到 10,200 左右，9070 GRE 一度探到 3,352。但「回落」不等于「回归」，离首发价依然很远。</p>
+      <p>平台之间的差价规律倒是挺稳定：</p>
+      <ul>
+        <li><b>京东自营</b>：最贵，但货源、发票、售后最稳；缺点是旗舰型号经常无货，个别型号价格还反着涨。</li>
+        <li><b>淘宝</b>：第三方店为主，价格居中，波动大。品牌旗舰店可以放心，杂牌店看清楚再下单。</li>
+        <li><b>拼多多 / 抖音</b>：全网最低价基本出在这两家，同样是第三方店在卖。百亿补贴频道相对靠谱，来路不明的低价店要当心矿卡、翻新卡和「拍下改价」的套路。</li>
+      </ul>
+      <p>同一个平台的价差，这几天经常比平台之间的价差还大——这才是现在最麻烦的地方。</p>
+
+      <h3 id="price-3">3. 同一个芯片，不同品牌差上千块</h3>
+      <p>下面是我 11 月 20 日到 24 日从京东、天猫商品页直接抄下来的价（部分是领券后的到手价）。同一个 GPU，不同品牌的散热、频率、用料不一样，价差能拉开一千以上：</p>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>显卡</th>
+              <th>品牌 / 具体型号</th>
+              <th>平台</th>
+              <th>页面价</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>RTX 5070 Ti</td>
+              <td>技嘉 WF3 OC 16G</td>
+              <td>京东</td>
+              <td class="num">¥12,499（券后）</td>
+            </tr>
+            <tr>
+              <td>RTX 5070 Ti</td>
+              <td>微星 魔龙 TRIO OC 16G</td>
+              <td>京东</td>
+              <td class="num">¥12,499（券后）</td>
+            </tr>
+            <tr>
+              <td>RTX 5070 Ti</td>
+              <td>影驰 名人堂 HOF Pro 16G</td>
+              <td>京东</td>
+              <td class="num">¥12,999</td>
+            </tr>
+            <tr>
+              <td>RX 9070 XT</td>
+              <td>盈通 樱瞳水着 OC</td>
+              <td>京东</td>
+              <td class="num">¥6,997</td>
+            </tr>
+            <tr>
+              <td>RX 9070 XT</td>
+              <td>瀚铠 超合金 OC</td>
+              <td>京东</td>
+              <td class="num">¥7,099（满减后）</td>
+            </tr>
+            <tr>
+              <td>RX 9070 XT</td>
+              <td>技嘉 白魔鹰 OC ICE</td>
+              <td>京东</td>
+              <td class="num">¥7,799</td>
+            </tr>
+            <tr>
+              <td>RX 9070</td>
+              <td>迪兰 游荡者 16G</td>
+              <td>京东</td>
+              <td class="num">¥6,999</td>
+            </tr>
+            <tr>
+              <td>RTX 5070</td>
+              <td>七彩虹 iGame 系列</td>
+              <td>京东</td>
+              <td class="num">¥5,799（活动价）</td>
+            </tr>
+            <tr>
+              <td>RTX 5070</td>
+              <td>影驰 金属大师 OC</td>
+              <td>京东</td>
+              <td class="num">¥7,299</td>
+            </tr>
+            <tr>
+              <td>RTX 5070</td>
+              <td>华硕 PRIME OC</td>
+              <td>京东</td>
+              <td class="num">¥7,499</td>
+            </tr>
+            <tr>
+              <td>RX 9070 GRE</td>
+              <td>瀚铠 白合金 OC</td>
+              <td>京东</td>
+              <td class="num">¥5,699</td>
+            </tr>
+            <tr>
+              <td>RX 9070 GRE</td>
+              <td>技嘉 魔鹰 OC</td>
+              <td>京东</td>
+              <td class="num">¥5,799</td>
+            </tr>
+            <tr>
+              <td>RTX 5060 Ti 8G</td>
+              <td>映众 AX X2B</td>
+              <td>京东</td>
+              <td class="num">¥4,441（券后）</td>
+            </tr>
+            <tr>
+              <td>RTX 5060 Ti 8G</td>
+              <td>技嘉 魔鹰 OC</td>
+              <td>京东</td>
+              <td class="num">¥4,499</td>
+            </tr>
+            <tr>
+              <td>RTX 5060 Ti 8G</td>
+              <td>微星 魔龙 GAMING OC</td>
+              <td>京东</td>
+              <td class="num">¥4,599</td>
+            </tr>
+            <tr>
+              <td>RX 9060 XT 8G</td>
+              <td>华硕 PRIME OC</td>
+              <td>京东</td>
+              <td class="num">¥3,599</td>
+            </tr>
+            <tr>
+              <td>RX 9060 XT 16G</td>
+              <td>蓝宝石 氮动</td>
+              <td>京东</td>
+              <td class="num">¥5,999</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>几个值得记的点：</p>
+      <ul>
+        <li><b>同芯片不同品牌，价差最大的一档在 9070 XT</b>：盈通 6,997、技嘉白魔鹰 7,799，差了 800。散热规格和频率差异值不值这个差价，看你自己需求。</li>
+        <li><b>5070 出现了「倒挂」</b>：七彩虹活动价 5,799，比影驰、华硕便宜一千五——这个价随时会收回去，看到就尽快确认，别当成长期行情。</li>
+        <li><b>翻一下涨价前的常卖价，才知道这轮涨得有多狠</b>：技嘉 9070 GRE 魔鹰常卖 4,749，现在 5,799；蓝宝石 9060 XT 氮动常卖 4,899，现在 5,999；技嘉 5070
+          Ti 魔鹰常卖 8,349，现在挂到一万二以上。同一张卡，几个月时间贵出 20%-50%。</li>
+      </ul>
+      <p>还有一条路是二手。闲鱼上 50 系从 10 月底的高点连跌了半个多月，但累计跌幅远小于之前的涨幅——二手 5090 还挂在 3
+        万上下，新卡渠道撑价、二手投机盘出货，两边的价是脱节的。懂行的可以蹲个人自用卡，小白别碰，保卡、矿卡、翻新卡这个价位段全是坑。</p>
+
+      <h3 id="price-4">4. 这价钱到底买不买</h3>
+      <p>把价格和前文的性能放在一起看，我的看法是这样的：</p>
+      <ul>
+        <li><b>刚需</b>：盯着 9070 GRE 和 5060 Ti 8G。一个贴着首发价，一个刚好回到首发价，是眼下仅有的两个没被行情绑架的选择。但
+          GRE 的 12GB 显存和后文的帧数表现你都得认了再买。</li>
+        <li><b>想要层级一的性能</b>：5070 Ti 现在溢价 62%，最离谱的一张；9070 XT 溢价 21%，是这一层里相对讲理的。真急着上 4K，9070 XT
+          是性价比答案；非要 DLSS 生态和光追上限，就得为 5070 Ti 的溢价买单。</li>
+        <li><b>不急</b>：等。这不是套话——显存现货价还在高位横着，渠道库存是高价囤的，短期不会崩，但中端卡的泡沫已经开始挤了。黑色星期五这种节点，高端卡大概率是「售罄」而不是「打折」，别抱幻想。</li>
+      </ul>
+      <p>最后再啰嗦一句：这一节所有价格都是 2026 年 11 月 24 日前后的快照，行情一天一变。下单前，把同一型号在京东、淘宝、拼多多各刷一遍，谁便宜一百是一百。</p>
+
+    </div>
+  </div>
+
+  <!-- 全文总结 -->
+  <div class="container">
+    <div class="summary-card" id="conclusion">
+      <p class="sum-tag">S U M M A R Y</p>
+      <h2>全文<span class="sum-word">总结</span></h2>
+      <ul>
+        <li><b>行情</b>：2026 年英伟达把产能押向 AI，游戏卡全年没发新卡，叠加显存涨价，年底整体高位——除了 9070 GRE 贴着首发价、5060 Ti 8G 回到首发价，其余全部溢价，5070 Ti 最狠（+62%）。</li>
+        <li><b>跑分</b>：纯光栅 3DMark 分数里 RX 9070 XT 领跑九卡，A 卡在主流价位产品线更厚；但 Time Spy 不测光追和 AI，实际游戏里 N 卡靠 DLSS 生态把差距扳回来。</li>
+        <li><b>层级一</b>：只看传统性能选 9070 XT（性价比最高）；要 4K 光追 + DLSS 4.5 多帧生成的完整体验，只有 5070 Ti；4080 性能仍能打，但技术代际已落后。</li>
+        <li><b>层级二</b>：9070 一枝独秀；5070 与 9070 GRE 跑分几乎持平，胜负在光追生态与价格——GRE 是本轮唯一没涨的卡。</li>
+        <li><b>层级三</b>：4070 Ti 老将压场；5060 Ti 8G 与 9060 XT 跑分打平，但《无主之地4》实测证明这一代游戏里<b>显存容量比跑分数字更重要</b>，能上 16GB 就别选 8GB。</li>
+        <li><b>怎么买</b>：刚需盯 GRE 和 5060 Ti 8G；想要层级一性能，9070 XT 溢价相对讲理；不急就等，别在高位接盘。</li>
+      </ul>
+      <div class="card-actions">
+        <button class="act-btn" data-action="like" type="button" aria-pressed="false">
+          <span class="heart">♡</span> 喜欢
+        </button>
+        <button class="act-btn" data-action="save" type="button" aria-pressed="false">☆ 收藏这篇</button>
+        <button class="act-btn" data-action="share" type="button">↗ 分享</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 页面签名 -->
+  <footer class="site-footer">
+    <img src="image/logo.png" alt="NightWeaver 夜语织梦 · EVAN" />
+    <p>NightWeaver · 夜语织梦　作者：Evan</p>
+    <p>2026-11-24 整理 · <a href="https://nightweaver.top/">返回首页</a></p>
+  </footer>
+
+  <!-- 回到顶部 -->
+  <button id="back-top" type="button" aria-label="回到顶部" title="回到顶部">
+    <span class="top-arrow">↑</span><span class="top-word">TOP</span>
+  </button>
+
+  <script>
+    (function () {
+      // ---- 喜欢：小红心，点亮状态存 localStorage ----
+      var LIKE_KEY = 'gpu2026-like';
+      var SAVE_KEY = 'gpu2026-save';
+      var likeBtn = document.querySelector('[data-action="like"]');
+      var saveBtn = document.querySelector('[data-action="save"]');
+      var shareBtn = document.querySelector('[data-action="share"]');
+      var topBtn = document.getElementById('back-top');
+
+      if (localStorage.getItem(LIKE_KEY) === '1') {
+        likeBtn.classList.add('liked');
+        likeBtn.querySelector('.heart').textContent = '♥';
+        likeBtn.setAttribute('aria-pressed', 'true');
+      }
+
+      if (localStorage.getItem(SAVE_KEY) === '1') {
+        saveBtn.classList.add('saved');
+        saveBtn.textContent = '★ 已收藏';
+        saveBtn.setAttribute('aria-pressed', 'true');
+      }
+
+      likeBtn.addEventListener('click', function () {
+        var on = likeBtn.classList.toggle('liked');
+        likeBtn.querySelector('.heart').textContent = on ? '♥' : '♡';
+        likeBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        localStorage.setItem(LIKE_KEY, on ? '1' : '0');
+      });
+
+      saveBtn.addEventListener('click', function () {
+        var on = saveBtn.classList.toggle('saved');
+        saveBtn.textContent = on ? '★ 已收藏' : '☆ 收藏这篇';
+        saveBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        localStorage.setItem(SAVE_KEY, on ? '1' : '0');
+      });
+
+      shareBtn.addEventListener('click', function () {
+        var url = location.href;
+        var title = document.title;
+        var flash = function (text) {
+          shareBtn.textContent = text;
+          setTimeout(function () { shareBtn.textContent = '↗ 分享'; }, 2000);
+        };
+        var copyLink = function () {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url)
+              .then(function () { flash('✓ 已复制链接'); })
+              .catch(function () { legacyCopy(); });
+          } else {
+            legacyCopy();
+          }
+        };
+        // 兜底：clipboard API 不可用时（file:// 或老浏览器）
+        var legacyCopy = function () {
+          var tmp = document.createElement('textarea');
+          tmp.value = url;
+          tmp.style.position = 'fixed';
+          tmp.style.opacity = '0';
+          document.body.appendChild(tmp);
+          tmp.select();
+          try { document.execCommand('copy'); flash('✓ 已复制链接'); }
+          catch (e) { flash('✗ 复制失败'); }
+          document.body.removeChild(tmp);
+        };
+        if (navigator.share) {
+          // 有系统分享面板就先调它；用户取消或失败，降级为复制链接
+          navigator.share({ title: title, url: url })
+            .then(function () { flash('✓ 已分享'); })
+            .catch(function () { copyLink(); });
+        } else {
+          copyLink();
+        }
+      });
+
+      // ---- 回到顶部：滚过一屏才出现 ----
+      var toggleTop = function () {
+        topBtn.classList.toggle('show', window.scrollY > 600);
+      };
+      window.addEventListener('scroll', toggleTop, { passive: true });
+      toggleTop();
+      topBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // ---- 左侧目录：滚动时高亮当前读到的小节 ----
+      var toc = document.getElementById('toc');
+      if (toc) {
+        var tocLinks = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+        var tocTargets = tocLinks
+          .map(function (a) { return document.querySelector(a.getAttribute('href')); })
+          .filter(Boolean);
+
+        var updateToc = function () {
+          // 触发线 = 视口顶部往下 140px：谁在它上方，谁就是当前小节
+          var line = window.scrollY + 140;
+          var current = -1;
+          for (var i = 0; i < tocTargets.length; i++) {
+            var top = tocTargets[i].getBoundingClientRect().top + window.scrollY;
+            if (top <= line) current = i;
+          }
+          tocLinks.forEach(function (a, i) {
+            a.classList.toggle('active', i === current);
+          });
+        };
+        window.addEventListener('scroll', updateToc, { passive: true });
+        updateToc();
+
+        // ---- 宽窄屏自动切换形态：窄屏/手机折叠在横幅下方，宽屏悬浮左侧常开 ----
+        var tocBox = document.getElementById('toc-box');
+        var leadBanner = document.querySelector('.lead-banner');
+        if (leadBanner) {
+          // 挪到甄选横幅下方；宽屏目录是 fixed 悬浮，挪动不影响它
+          leadBanner.insertAdjacentElement('afterend', toc);
+        }
+        var desktopMq = window.matchMedia('(min-width: 1500px)');
+        var syncTocMode = function () {
+          tocBox.open = desktopMq.matches;
+        };
+        if (desktopMq.addEventListener) {
+          desktopMq.addEventListener('change', syncTocMode);
+        }
+        syncTocMode();
+        // 窄屏下点目录跳转后自动收起，不挡正文
+        tocLinks.forEach(function (a) {
+          a.addEventListener('click', function () {
+            if (!desktopMq.matches) tocBox.open = false;
+          });
+        });
+      }
+    })();
+  </script>
+
+</body>
+
+</html>
