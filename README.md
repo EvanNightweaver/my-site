@@ -7,8 +7,8 @@ Evan 的个人静态站 · nightweaver.top
 ## 目录约定
 
 - **根目录放页面**：一个 html 就是一个网址，不按日期或编号分子目录。
-- **`image/` 放所有图片**：页面里一律写相对路径 `image/xxx.png`，所以 html 和 `image/` 必须同级。
-  - 根目录的 `logo.png` 是早期遗留、首页仍在用，暂不挪动；**新增图片一律放 `image/`**。
+- **`image/` 放所有图片**：页面里一律写相对路径 `image/xxx.png`，所以 html 和 `image/` 必须同级；唯一例外是根目录的站点标识 `logo.png`。
+  - `logo.png` 放根目录是刻意的：首页、`github-terms.html`、`gpu-comparison.html` 页脚共用这一份，页面里直接写 `logo.png`（不带 `image/`）；原先 `image/logo.png` 是同一张图的冗余副本，已删除。**新增图片一律放 `image/`**。
 - 每个页面的 CSS 和 JS 都内联在 html 里，**不需要额外上传 css / js 文件**。
 
 ## 命名约定
@@ -31,14 +31,14 @@ Evan 的个人静态站 · nightweaver.top
 | `github-terms.html` | 文章 | GitHub 高频术语表 |
 | `local-ai-pick.html` | 文章 | 本地 AI 选型对比 |
 | `gpu-comparison.html` | 文章 | 中高端主流显卡性能及价格对比（2026-11-24） |
-| `logo.png` | 图片 | 早期遗留，首页在用，别删 |
-| `image/` | 图片目录 | 文章配图、Logo 发布副本、天梯图 SVG |
+| `logo.png` | 图片 | 站点标识，根目录唯一一份；首页 / 术语页 / 显卡对比页页脚共用，别删 |
+| `image/` | 图片目录 | 文章配图、Banner 用 `mylogo.png`、天梯图 SVG |
 
 两类要分清：**栏目页**长期不变、不标日期；**文章**有发布日期、靠首页列表串起来。
 
 ## 发一篇新文章的固定动作
 
-1. 写 md，用本机的 `build.js` 生成 html（模板与规范见工作区 `出品规范/05-发文工作流.md`）。
+1. 写 md，用本机的 `build.js` 生成 html（模板与规范见 `E:\WorkBuddySpace\My_Knowledge_Vault\出品规范\05-发文工作流.md`）。
 2. html 放进本仓库**根目录**并改好名字；配图放进 `image/`。
 3. 在 `index.html` 的「作品与练习」里补一条 `<li>`，新的放最上面。
 4. `git add .` → `git commit` → `git push`；推完等 EdgeOne 自动同步。
