@@ -2218,7 +2218,6 @@
 
       shareBtn.addEventListener('click', function () {
         var url = location.href;
-        var title = document.title;
         var flash = function (text) {
           shareBtn.textContent = text;
           setTimeout(function () { shareBtn.textContent = '↗ 分享'; }, 2000);
@@ -2232,7 +2231,7 @@
             legacyCopy();
           }
         };
-        // 兜底：clipboard API 不可用时（file:// 或老浏览器）
+        // 兜底：clipboard API 不可用时（file:// 或老浏览器）；本地双击验证时走这条
         var legacyCopy = function () {
           var tmp = document.createElement('textarea');
           tmp.value = url;
@@ -2244,14 +2243,12 @@
           catch (e) { flash('✗ 复制失败'); }
           document.body.removeChild(tmp);
         };
-        if (navigator.share) {
-          // 有系统分享面板就先调它；用户取消或失败，降级为复制链接
-          navigator.share({ title: title, url: url })
-            .then(function () { flash('✓ 已分享'); })
-            .catch(function () { copyLink(); });
-        } else {
-          copyLink();
-        }
+        // 只复制链接，不调 navigator.share。
+        // 原因：桌面浏览器 / 内嵌 WebView 里 navigator.share 会弹出系统原生分享面板，
+        // 部分环境下是空白框且关不掉（Promise 一直 pending，既不 then 也不 catch）；
+        // 那个面板归浏览器管，网页里的 flash() 定时器碰不到它。
+        // legacyCopy() 仍作兜底：file:// 打开或老浏览器无 clipboard API 时照样能复制。
+        copyLink();
       });
 
       // ---- 回到顶部：滚过一屏才出现 ----
